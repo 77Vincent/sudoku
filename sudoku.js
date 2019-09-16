@@ -1,10 +1,3 @@
-/**
- * SUDOKU Solver and generator
- * author 77Vincent
- * email wentianqi77@outlook.com
- * github 77Vincent
- */
-
 const SCALE = 9
 const board = new Array(SCALE)
   .fill()
@@ -44,7 +37,6 @@ function doku(board) {
     }
   }
 
-      console.log(existing)
   return board
 }
 
