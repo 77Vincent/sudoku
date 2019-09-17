@@ -19,7 +19,7 @@ function solve(board) {
 
       let r = random(range.r[0], range.r[1])
       let c = random(range.c[0], range.c[1])
-      // let t = 1
+      let t = 1
 
       Object.keys(sus).forEach(su => {
         sus[su].forEach(cor => {
@@ -27,23 +27,18 @@ function solve(board) {
         })
       })
 
-      while (
-        cors.map(cor => cor.toString()).includes([r, c].toString())
-      ) {
-        r = random(range.r[0], range.r[1])
-        c = random(range.c[0], range.c[1])
+      for (t ; t <= 30; t += 1) {
+        if (
+          cors.map(cor => cor.toString()).includes([r, c].toString())
+          || sus[su].map(cor => cor[0]).includes(r)
+          || sus[su].map(cor => cor[1]).includes(c)
+        ) {
+          r = random(range.r[0], range.r[1])
+          c = random(range.c[0], range.c[1])
+        } else {
+          break
+        }
       }
-
-      // for (t ; t <= 10; t += 1) {
-      //   if (
-      //     cors.map(cor => cor.toString()).includes([r, c].toString())
-      //   ) {
-      //     r = random(range.r[0], range.r[1])
-      //     c = random(range.c[0], range.c[1])
-      //   } else {
-      //     break
-      //   }
-      // }
 
       sus[su][i] = [r, c]
     }
@@ -59,6 +54,12 @@ function solve(board) {
   return board 
 }
 
-const testBoard = solve(initialBoard)
+let testBoard = solve(initialBoard)
+
+while (!validate(testBoard)) {
+  console.log(testBoard)
+  testBoard = solve(initialBoard)
+}
+
 console.log(testBoard)
 console.log(validate(testBoard))
