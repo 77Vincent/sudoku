@@ -1,44 +1,64 @@
-const SCALE = 9
-const board = new Array(SCALE)
-  .fill()
-  .map(row => new Array(SCALE).fill(0))
+const {
+  initialBoard,
+  getBlockRange
+} = require('./utilities')
 
-function random(exclusion = []) {
-  const max = SCALE
-  const min = 1
+const validate  = require('./validate')
 
-  const ran = () => min + Math.floor(Math.random() * (max - min + 1))
-
-  let r = ran()
-
-  while (exclusion.includes(r)) {
-    r = ran()
-  }
-
-  return r
+function random(min, max) {
+  return min + Math.floor(Math.random() * (max - min + 1))
 }
 
-function doku(board) {
-  let existingR = []
-  let existingC = []
-  let existingB = []
-  let existing = []
+function solve(board) {
+  const sus = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [] }
+  const cors = []
 
-  for (let r = 0; r < SCALE; r += 1) {
-    for (let c = 0; c < SCALE; c += 1) {
-      existingR = board[r]
-      existingC = board.map(row => row[c])
-      existing = Array.from(new Set([].concat(existingR, existingC, existingB)))
+  for (let su = 1; su <= 9; su += 1) {
+    for (let i = 0; i < 9; i += 1) {
+      const range = getBlockRange(i + 1)
 
-      if (existing.length === 10) {
-      } else {
-        board[r][c] = random(existing)
+      let r = random(range.r[0], range.r[1])
+      let c = random(range.c[0], range.c[1])
+      // let t = 1
+
+      Object.keys(sus).forEach(su => {
+        sus[su].forEach(cor => {
+          cors.push(cor)
+        })
+      })
+
+      while (
+        cors.map(cor => cor.toString()).includes([r, c].toString())
+      ) {
+        r = random(range.r[0], range.r[1])
+        c = random(range.c[0], range.c[1])
       }
+
+      // for (t ; t <= 10; t += 1) {
+      //   if (
+      //     cors.map(cor => cor.toString()).includes([r, c].toString())
+      //   ) {
+      //     r = random(range.r[0], range.r[1])
+      //     c = random(range.c[0], range.c[1])
+      //   } else {
+      //     break
+      //   }
+      // }
+
+      sus[su][i] = [r, c]
     }
   }
-
-  return board
+  // render the sus into the board
+  Object.keys(sus).map(su => {
+    sus[su].forEach(cor => {
+      let r = cor[0]
+      let c = cor[1]
+      board[r][c] = Number(su)
+    })
+  })
+  return board 
 }
 
-console.log(doku(board))
-
+const testBoard = solve(initialBoard)
+console.log(testBoard)
+console.log(validate(testBoard))
