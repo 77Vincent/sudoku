@@ -1,15 +1,10 @@
 const {
   initialBoard,
-  getBlockRange
+  getBlockRange,
+  pick,
 } = require('./utilities')
 
 const validate  = require('./validate')
-
-function pick(...args) {
-  const seed = 1 + Math.floor(Math.random() * args.length)
-
-  return args[seed - 1]
-}
 
 function solve(board) {
   const sus = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [], 8: [], 9: [] }

@@ -28,8 +28,15 @@ function getBlockRange(i) {
   }
 }
 
+function pick(...args) {
+  const seed = 1 + Math.floor(Math.random() * args.length)
+
+  return args[seed - 1]
+}
+
 module.exports = {
   initialBoard,
   validBoardA,
   getBlockRange, 
+  pick,
 }
