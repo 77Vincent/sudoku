@@ -5,22 +5,10 @@ const {
 
 const validate  = require('./validate')
 
-function pick(a, b, c) {
-  const seed = 1 + Math.floor(Math.random() * 3)
-  let output
+function pick(...args) {
+  const seed = 1 + Math.floor(Math.random() * args.length)
 
-  switch (seed) {
-    case 1:
-      output = a
-      break
-    case 2:
-      output = b
-      break
-    case 3:
-      output = c
-  }
-
-  return output
+  return args[seed - 1]
 }
 
 function solve(board) {
