@@ -5,8 +5,22 @@ const {
 
 const validate  = require('./validate')
 
-function random(min, max) {
-  return min + Math.floor(Math.random() * (max - min + 1))
+function pick(a, b, c) {
+  const seed = 1 + Math.floor(Math.random() * 3)
+  let output
+
+  switch (seed) {
+    case 1:
+      output = a
+      break
+    case 2:
+      output = b
+      break
+    case 3:
+      output = c
+  }
+
+  return output
 }
 
 function solve(board) {
@@ -17,8 +31,8 @@ function solve(board) {
     for (let i = 0; i < 9; i += 1) {
       const range = getBlockRange(i + 1)
 
-      let r = random(range.r[0], range.r[1])
-      let c = random(range.c[0], range.c[1])
+      let r = pick(...range.r)
+      let c = pick(...range.c)
       let t = 1
 
       Object.keys(sus).forEach(su => {
@@ -27,14 +41,14 @@ function solve(board) {
         })
       })
 
-      for (t ; t <= 30; t += 1) {
+      for (t ; t <= 100; t += 1) {
         if (
           cors.map(cor => cor.toString()).includes([r, c].toString())
           || sus[su].map(cor => cor[0]).includes(r)
           || sus[su].map(cor => cor[1]).includes(c)
         ) {
-          r = random(range.r[0], range.r[1])
-          c = random(range.c[0], range.c[1])
+          r = pick(...range.r)
+          c = pick(...range.c)
         } else {
           break
         }

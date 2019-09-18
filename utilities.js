@@ -19,9 +19,12 @@ function getBlockRange(i) {
   let r = i%3 || 3
   let c = Math.ceil(i/3)
 
+  const baseR = (c - 1) * 3
+  const baseC = (r - 1) * 3
+
   return {
-    r: [(c - 1) * 3, c * 3 - 1],
-    c: [(r - 1) * 3, r * 3 - 1],
+    r: [baseR, baseR + 1, baseR + 2],
+    c: [baseC, baseC + 1, baseC + 2],
   }
 }
 
