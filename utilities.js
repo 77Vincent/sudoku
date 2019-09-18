@@ -1,31 +1,63 @@
-const SCALE = 9
-const initialBoard = new Array(SCALE)
-  .fill()
-  .map(row => new Array(SCALE).fill(0))
+function validate(board = []) {
+  let isRowValid = true
+  let isColumnValid = true
+  let isBlockValid = true
 
-const validBoardA = [
-  [1, 2, 3, 4, 5, 6, 7, 8, 9],
-  [7, 8, 9, 1, 2, 3, 4, 5, 6],
-  [4, 5, 6, 7, 8, 9, 1, 2, 3],
-  [3, 1, 2, 8, 4, 5, 9, 6, 7],
-  [6, 9, 7, 3, 1, 2, 8, 4, 5],
-  [8, 4, 5, 6, 9, 7, 3, 1, 2],
-  [2, 3, 1, 5, 7, 4, 6, 9, 8],
-  [9, 6, 8, 2, 3, 1, 5, 7, 4],
-  [5, 7, 4, 9, 6, 8, 2, 3, 1],
-]
+  for (let i = 0; i < 9; i += 1) {
+    // Validate row
+    if ( new Set(board[i]).size !== 9 ) {
+      isRowValid = false
+      break
+    }
+
+    // Validate column
+    const column = board.map(row => {
+      return row[i]
+    })
+    if (new Set(column).size !== 9) {
+      isColumnValid = false
+      break
+    }
+
+    // Validate block
+    const range = getBlockRange(i + 1)
+    const block = board 
+      .slice(range.x[0], range.x[2] + 1)
+      .reduce(
+        (a, row) => a.concat(row.slice(range.y[0], range.y[2] + 1)),
+        []
+      )
+    if (new Set(block).size !== 9) {
+      isBlockValid = false
+      break
+    }
+  }
+  return isRowValid && isColumnValid && isBlockValid
+}
 
 function getBlockRange(i) {
-  let r = i%3 || 3
-  let c = Math.ceil(i/3)
+  let x = i%3 || 3
+  let y = Math.ceil(i/3)
 
-  const baseR = (c - 1) * 3
-  const baseC = (r - 1) * 3
+  const baseX = (x - 1) * 3
+  const baseY = (y - 1) * 3
 
   return {
-    r: [baseR, baseR + 1, baseR + 2],
-    c: [baseC, baseC + 1, baseC + 2],
+    x: [baseX, baseX + 1, baseX + 2],
+    y: [baseY, baseY + 1, baseY + 2],
   }
+}
+
+function multiplyArray(arrayA = [], arrayB = []) {
+  const multiplication = []
+
+  arrayA.forEach(a => {
+    arrayB.forEach(b => {
+      multiplication.push([a, b])
+    }) 
+  })
+
+  return multiplication
 }
 
 function pick(...args) {
@@ -35,8 +67,8 @@ function pick(...args) {
 }
 
 module.exports = {
-  initialBoard,
-  validBoardA,
   getBlockRange, 
   pick,
+  validate,
+  multiplyArray,
 }
