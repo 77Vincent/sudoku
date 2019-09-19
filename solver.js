@@ -9,27 +9,42 @@ const {
   pick,
   multiplyArray,
   validate,
+  printBoard,
 } = require('./utilities')
 
 function solve() {
   const SCALE = 9
-  const board = new Array(SCALE)
+  let board = new Array(SCALE)
     .fill()
     .map(row => new Array(SCALE).fill(0))
 
-  const sus = new Array(9).fill([])
+  function getAvailables(su, i) {
+    let range = getBlockRange(i + 1)
+    let corRange = multiplyArray(range.x, range.y)
+    return corRange
+      // Check occupation
+      .filter(cor => board[cor[1]][cor[0]] === 0)
+      // Check column conflict
+      .filter(cor => !board.map(row => row[cor[0]]).includes(su))
+      // Check row conflict
+      .filter(cor => !board[cor[1]].includes(su))
+  }
 
-  for (let su = 0; su < 9; su += 1) {
+  for (let sui = 0; sui < 9; sui += 1) {
+    let su = sui + 1
+
     for (let i = 0; i < 9; i += 1) {
-      const range = getBlockRange(i + 1)
-      const corRange = multiplyArray(range.x, range.y)
+      let availables = getAvailables(su, i)
 
-      let cor = pick(...corRange)
+      while (availables.length === 0) {
+        // Restart from the first item of the current number
+        i = 0
+        board = board.map(row => row.map(num => num === su ? 0 : num))
+        availables = getAvailables(su, i)
+      }
 
-      // if su is aleady in the block
-
-      sus[su][i] = cor
-      board[cor[1]][cor[0]] = su + 1
+      let cor = pick(...availables)
+      board[cor[1]][cor[0]] = su
     }
   }
 
@@ -43,5 +58,5 @@ let resolution = solve()
 //   testBoard = solve(initialBoard)
 // }
 
-console.log(resolution)
+console.log(printBoard(resolution))
 console.log(validate(resolution))

@@ -39,11 +39,11 @@ function testPick(array) {
     counter[array.indexOf(p)] += 1
   }
 
-  const total = counter.reduce((a, n) => a + n)
+  const total = counter.reduce((a, n) => a + n, 0)
 
   console.log("Test of pick function:")
-  counter.forEach(num => {
-    console.log(num / total)
+  counter.forEach((num, i) => {
+    console.log('Percent of ' + array[i] + ': ' + num / total)
   })
 }
 
@@ -73,8 +73,8 @@ function testPrintBoard() {
   console.log(printBoard(validBoard))
 }
 
-// testPick([1, 2, 3, 4])
+testPick([1, 2, 3])
 // testGetBlockRange()
 // testValidate()
 // testMultiplyArray()
-testPrintBoard()
+// testPrintBoard()

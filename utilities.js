@@ -77,7 +77,7 @@ function printBoard(board) {
     borderColumn = ''
 
     for (let x = 0; x < 9; x += 1) {
-      borderColumn += '| ' + board[y][x] + ' '
+      borderColumn += '| ' + (board[y][x] || ' ') + ' '
     }
     borderColumn += '|\n'
 
