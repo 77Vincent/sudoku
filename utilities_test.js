@@ -3,7 +3,32 @@ const {
   getBlockRange,
   multiplyArray,
   validate,
+  printBoard,
 } = require('./utilities')
+
+const validBoard = [
+  [1, 2, 3, 4, 5, 6, 7, 8, 9],
+  [7, 8, 9, 1, 2, 3, 4, 5, 6],
+  [4, 5, 6, 7, 8, 9, 1, 2, 3],
+  [3, 1, 2, 8, 4, 5, 9, 6, 7],
+  [6, 9, 7, 3, 1, 2, 8, 4, 5],
+  [8, 4, 5, 6, 9, 7, 3, 1, 2],
+  [2, 3, 1, 5, 7, 4, 6, 9, 8],
+  [9, 6, 8, 2, 3, 1, 5, 7, 4],
+  [5, 7, 4, 9, 6, 8, 2, 3, 1],
+]
+
+const invalidBoard = [
+  [1, 2, 3, 4, 5, 6, 7, 8, 9],
+  [7, 8, 9, 1, 2, 3, 4, 5, 6],
+  [4, 5, 6, 7, 8, 9, 1, 2, 3],
+  [3, 1, 2, 8, 4, 5, 9, 6, 7],
+  [6, 9, 7, 3, 1, 2, 8, 4, 5],
+  [8, 4, 5, 6, 9, 7, 3, 1, 2],
+  [2, 3, 1, 5, 7, 4, 6, 9, 8],
+  [9, 6, 8, 2, 3, 1, 5, 7, 4],
+  [5, 7, 4, 9, 3, 8, 2, 3, 1],
+]
 
 function testPick(array) {
   const iterations = 9999
@@ -30,30 +55,6 @@ function testGetBlockRange() {
 }
 
 function testValidate() {
-  const validBoard = [
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [7, 8, 9, 1, 2, 3, 4, 5, 6],
-    [4, 5, 6, 7, 8, 9, 1, 2, 3],
-    [3, 1, 2, 8, 4, 5, 9, 6, 7],
-    [6, 9, 7, 3, 1, 2, 8, 4, 5],
-    [8, 4, 5, 6, 9, 7, 3, 1, 2],
-    [2, 3, 1, 5, 7, 4, 6, 9, 8],
-    [9, 6, 8, 2, 3, 1, 5, 7, 4],
-    [5, 7, 4, 9, 6, 8, 2, 3, 1],
-  ]
-
-  const invalidBoard = [
-    [1, 2, 3, 4, 5, 6, 7, 8, 9],
-    [7, 8, 9, 1, 2, 3, 4, 5, 6],
-    [4, 5, 6, 7, 8, 9, 1, 2, 3],
-    [3, 1, 2, 8, 4, 5, 9, 6, 7],
-    [6, 9, 7, 3, 1, 2, 8, 4, 5],
-    [8, 4, 5, 6, 9, 7, 3, 1, 2],
-    [2, 3, 1, 5, 7, 4, 6, 9, 8],
-    [9, 6, 8, 2, 3, 1, 5, 7, 4],
-    [5, 7, 4, 9, 3, 8, 2, 3, 1],
-  ]
-
   console.log("Test of valiate function:")
   console.log('This is a valid board: ' + validate(validBoard))
   console.log('This is an invalid board: ' + validate(invalidBoard))
@@ -67,7 +68,13 @@ function testMultiplyArray() {
   console.log(multiplyArray(a, b))
 }
 
+function testPrintBoard() {
+  console.log("Test of printBoard function:")
+  console.log(printBoard(validBoard))
+}
+
 // testPick([1, 2, 3, 4])
 // testGetBlockRange()
 // testValidate()
-testMultiplyArray()
+// testMultiplyArray()
+testPrintBoard()

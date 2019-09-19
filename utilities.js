@@ -66,9 +66,31 @@ function pick(...args) {
   return args[seed - 1]
 }
 
+function printBoard(board) {
+  const borderRow = new Array(9).fill('+---').map(v => v).join('') + '+\n'
+  let borderColumn = ''
+  let output = ''
+
+  for (let y = 0; y < 9; y += 1) {
+    output += borderRow
+
+    borderColumn = ''
+
+    for (let x = 0; x < 9; x += 1) {
+      borderColumn += '| ' + board[y][x] + ' '
+    }
+    borderColumn += '|\n'
+
+    output += borderColumn
+  }
+  output += borderRow
+  return output
+}
+
 module.exports = {
   getBlockRange, 
   pick,
   validate,
+  printBoard,
   multiplyArray,
 }
