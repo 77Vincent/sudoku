@@ -89,8 +89,8 @@ function printBoard(board) {
 
 module.exports = {
   getBlockRange, 
-  pick,
-  validate,
-  printBoard,
   multiplyArray,
+  pick,
+  printBoard,
+  validate,
 }

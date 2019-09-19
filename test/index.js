@@ -4,33 +4,15 @@ const {
   multiplyArray,
   validate,
   printBoard,
-} = require('./utilities')
+} = require('../utilities')
 
-const sudoku = require('./sudoku')
+const {
+  validBoard,
+  invalidBoard,
+  incompleteBoard,
+} = require('./board')
 
-const validBoard = [
-  [1, 2, 3, 4, 5, 6, 7, 8, 9],
-  [7, 8, 9, 1, 2, 3, 4, 5, 6],
-  [4, 5, 6, 7, 8, 9, 1, 2, 3],
-  [3, 1, 2, 8, 4, 5, 9, 6, 7],
-  [6, 9, 7, 3, 1, 2, 8, 4, 5],
-  [8, 4, 5, 6, 9, 7, 3, 1, 2],
-  [2, 3, 1, 5, 7, 4, 6, 9, 8],
-  [9, 6, 8, 2, 3, 1, 5, 7, 4],
-  [5, 7, 4, 9, 6, 8, 2, 3, 1],
-]
-
-const invalidBoard = [
-  [1, 2, 3, 4, 5, 6, 7, 8, 9],
-  [7, 8, 9, 1, 2, 3, 4, 5, 6],
-  [4, 5, 6, 7, 8, 9, 1, 2, 3],
-  [3, 1, 2, 8, 4, 5, 9, 6, 7],
-  [6, 9, 7, 3, 1, 2, 8, 4, 5],
-  [8, 4, 5, 6, 9, 7, 3, 1, 2],
-  [2, 3, 1, 5, 7, 4, 6, 9, 8],
-  [9, 6, 8, 2, 3, 1, 5, 7, 4],
-  [5, 7, 4, 9, 3, 8, 2, 3, 1],
-]
+const sudoku = require('../sudoku')
 
 function testPick(array) {
   const iterations = 9999
@@ -86,4 +68,4 @@ function testSudoku(board) {
 // testValidate()
 // testMultiplyArray()
 // testPrintBoard()
-testSudoku()
+testSudoku(incompleteBoard)
