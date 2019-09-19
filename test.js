@@ -6,6 +6,8 @@ const {
   printBoard,
 } = require('./utilities')
 
+const sudoku = require('./sudoku')
+
 const validBoard = [
   [1, 2, 3, 4, 5, 6, 7, 8, 9],
   [7, 8, 9, 1, 2, 3, 4, 5, 6],
@@ -70,11 +72,18 @@ function testMultiplyArray() {
 
 function testPrintBoard() {
   console.log("Test of printBoard function:")
-  console.log(printBoard(validBoard))
+  printBoard(validBoard)
 }
 
-testPick([1, 2, 3])
+function testSudoku(board) {
+  const result = sudoku(board)
+  printBoard(result)
+  console.log(validate(result))
+}
+
+// testPick([1, 2, 3])
 // testGetBlockRange()
 // testValidate()
 // testMultiplyArray()
 // testPrintBoard()
+testSudoku()

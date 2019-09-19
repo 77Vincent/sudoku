@@ -84,7 +84,7 @@ function printBoard(board) {
     output += borderColumn
   }
   output += borderRow
-  return output
+  console.log(output)
 }
 
 module.exports = {

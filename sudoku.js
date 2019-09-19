@@ -12,11 +12,10 @@ const {
   printBoard,
 } = require('./utilities')
 
-function solve() {
-  const SCALE = 9
-  let board = new Array(SCALE)
+function sudoku(board) {
+  board = board || new Array(9)
     .fill()
-    .map(row => new Array(SCALE).fill(0))
+    .map(row => new Array(9).fill(0))
 
   function getAvailables(su, i) {
     let range = getBlockRange(i + 1)
@@ -32,31 +31,25 @@ function solve() {
 
   for (let sui = 0; sui < 9; sui += 1) {
     let su = sui + 1
+    let cor = []
 
     for (let i = 0; i < 9; i += 1) {
       let availables = getAvailables(su, i)
 
-      while (availables.length === 0) {
-        // Restart from the first item of the current number
-        i = 0
+      if (availables.length === 0) {
+        sui -= 2
         board = board.map(row => row.map(num => num === su ? 0 : num))
-        availables = getAvailables(su, i)
-      }
+        board = board.map(row => row.map(num => num === su - 1 ? 0 : num))
+        break
 
-      let cor = pick(...availables)
-      board[cor[1]][cor[0]] = su
+      } else {
+        cor.push(pick(...availables))
+        board[cor[cor.length - 1][1]][cor[cor.length - 1][0]] = su
+      }
     }
   }
 
   return board 
 }
 
-let resolution = solve()
-
-// while (!validate(testBoard)) {
-//   console.log(testBoard)
-//   testBoard = solve(initialBoard)
-// }
-
-console.log(printBoard(resolution))
-console.log(validate(resolution))
+module.exports = sudoku 
