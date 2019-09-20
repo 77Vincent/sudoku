@@ -16,7 +16,6 @@ function sudoku(board) {
   board = board || new Array(9)
     .fill()
     .map(row => new Array(9).fill(0))
-  console.log(board)
 
   for (let sui = 0; sui < 9; sui += 1) {
     let su = sui + 1
@@ -26,8 +25,8 @@ function sudoku(board) {
       const range = getBlockRange(i + 1)
       const corRange = multiplyArray(range.x, range.y)
 
+      // Skip blocks where there is already a su filled in
       if (corRange.some(cor => board[cor[1]][cor[0]] === su)) {
-        // console.log(su)
         continue
       }
 
@@ -47,7 +46,7 @@ function sudoku(board) {
 
       } else {
         cor.push(pick(...availables))
-        board[cor[cor.length - 1][1]][cor[cor.length - 1][0]] = su
+        board[cor[i][1]][cor[i][0]] = su
       }
     }
   }

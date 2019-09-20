@@ -68,4 +68,4 @@ function testSudoku(board) {
 // testValidate()
 // testMultiplyArray()
 // testPrintBoard()
-testSudoku(incompleteBoard)
+testSudoku()

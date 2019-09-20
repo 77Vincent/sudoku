@@ -4,6 +4,9 @@ function validate(board = []) {
   let isBlockValid = true
 
   for (let i = 0; i < 9; i += 1) {
+    // Eliminate zero
+    board[i] = board[i].filter(i => i !== 0)
+    
     // Validate row
     if ( new Set(board[i]).size !== 9 ) {
       isRowValid = false
