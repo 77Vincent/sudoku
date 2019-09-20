@@ -13,13 +13,12 @@ const {
 } = require('./utilities')
 
 function sudoku(board) {
-  board = board || new Array(9)
-    .fill()
-    .map(row => new Array(9).fill(0))
+  board = board || new Array(9).fill().map(() => new Array(9).fill(0))
+  const cors = []
 
   for (let sui = 0; sui < 9; sui += 1) {
     let su = sui + 1
-    let cor = []
+    cors[sui] = []
 
     for (let i = 0; i < 9; i += 1) {
       const range = getBlockRange(i + 1)
@@ -45,8 +44,8 @@ function sudoku(board) {
         break
 
       } else {
-        cor.push(pick(...availables))
-        board[cor[i][1]][cor[i][0]] = su
+        cors[sui].push(pick(...availables))
+        board[cors[sui][i][1]][cors[sui][i][0]] = su
       }
     }
   }
