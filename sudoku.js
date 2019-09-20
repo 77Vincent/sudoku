@@ -15,6 +15,17 @@ const {
 function sudoku(board) {
   board = board || new Array(9).fill().map(() => new Array(9).fill(0))
   const cors = []
+  const existing = []
+
+  // record the existing ones
+  board.map((row, y) => row.map((num, x) => {
+    if (num !== 0) {
+      existing.push({
+        value: num,
+        cor: [x, y]
+      })
+    }
+  }))
 
   for (let suIndex = 0; suIndex < 9; suIndex += 1) {
     let su = suIndex + 1
@@ -42,10 +53,11 @@ function sudoku(board) {
         board = board.map(row => row.map(num => num === su ? 0 : num))
         board = board.map(row => row.map(num => num === su - 1 ? 0 : num))
         break
-
       } else {
         cors[suIndex].push(pick(...availables))
-        board[cors[suIndex][blockIndex][1]][cors[suIndex][blockIndex][0]] = su
+        const x = cors[suIndex][blockIndex][0]
+        const y = cors[suIndex][blockIndex][1]
+        board[y][x] = su
       }
     }
   }
