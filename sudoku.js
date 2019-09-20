@@ -16,15 +16,15 @@ function sudoku(board) {
   board = board || new Array(9).fill().map(() => new Array(9).fill(0))
   const cors = []
 
-  for (let sui = 0; sui < 9; sui += 1) {
-    let su = sui + 1
-    cors[sui] = []
+  for (let suIndex = 0; suIndex < 9; suIndex += 1) {
+    let su = suIndex + 1
+    cors[suIndex] = []
 
-    for (let i = 0; i < 9; i += 1) {
-      const range = getBlockRange(i + 1)
+    for (let blockIndex = 0; blockIndex < 9; blockIndex += 1) {
+      const range = getBlockRange(blockIndex + 1)
       const corRange = multiplyArray(range.x, range.y)
 
-      // Skip blocks where there is already a su filled in
+      // Skip blocks where there is already c su filled in
       if (corRange.some(cor => board[cor[1]][cor[0]] === su)) {
         continue
       }
@@ -38,14 +38,14 @@ function sudoku(board) {
         .filter(cor => !board[cor[1]].includes(su))
 
       if (availables.length === 0) {
-        sui -= 2
+        suIndex -= 2
         board = board.map(row => row.map(num => num === su ? 0 : num))
         board = board.map(row => row.map(num => num === su - 1 ? 0 : num))
         break
 
       } else {
-        cors[sui].push(pick(...availables))
-        board[cors[sui][i][1]][cors[sui][i][0]] = su
+        cors[suIndex].push(pick(...availables))
+        board[cors[suIndex][blockIndex][1]][cors[suIndex][blockIndex][0]] = su
       }
     }
   }
