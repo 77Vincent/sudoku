@@ -63,48 +63,46 @@ function testPrintBoard() {
 function testSudoku() {
   setTimeout(() => {
     const start = new Date().getTime()
-    const resultFromScratch = sudoku()
+    const result = sudoku()
     const end = new Date().getTime()
-    const output = `Resolution from blank board: ${validate(resultFromScratch)}\n`
+    const output = `Resolution from blank board: ${validate(result)}\n`
     const cost = `Cost: ${end - start} milliseconds`
     console.log(output + cost)
-    printBoard(resultFromScratch)
+    printBoard(result)
   }, 0);
   setTimeout(() => {
     const start = new Date().getTime()
-    const resultFromIncomplete = sudoku(incompleteValidBoard)
+    const result = sudoku(incompleteValidBoard)
     const end = new Date().getTime()
-    const output = `Resolution from incomplete board: ${validate(resultFromIncomplete)}\n`
+    const output = `Resolution from incomplete board: ${validate(result)}\n`
     const cost = `Cost: ${end - start} milliseconds`
     console.log(output + cost)
-    printBoard(resultFromIncomplete)
+    printBoard(result)
   }, 0);
 }
 
 function testSudokuMassively(usingBlank = true) {
-  const ITERATION = 500
+  const ITERATION = 50 
   const isAllValid = true
-  setTimeout(() => {
-    const start = new Date().getTime()
-    for (let i = 0; i < ITERATION; i++) {
-      const result = usingBlank ? sudoku() : sudoku(incompleteValidBoard)
-      if (validate(result)) {
-        printBoard(result)
-      } else {
-        isAllValid = false
-        break
-      }
+  const start = new Date().getTime()
+  for (let i = 0; i < ITERATION; i++) {
+    const result = usingBlank ? sudoku() : sudoku(incompleteValidBoard)
+    if (validate(result)) {
+      printBoard(result)
+    } else {
+      isAllValid = false
+      break
     }
-    const end = new Date().getTime()
-    const stdoutTitle = `Running from ${usingBlank ? 'blank' : 'pre-filled'} board\n`
-    const stdoutInfo = `Iterations: ${ITERATION}\nPer run: ${(end - start) / ITERATION} milliseconds\n`
-    const stdoutPass = `All passed: ${isAllValid}`
-    console.log(stdoutTitle + stdoutInfo + stdoutPass)
-  }, 0);
+  }
+  const end = new Date().getTime()
+  const stdoutTitle = `Running from ${usingBlank ? 'blank' : 'pre-filled'} board\n`
+  const stdoutInfo = `Iterations: ${ITERATION}\nPer run: ${(end - start) / ITERATION} milliseconds\n`
+  const stdoutPass = `All passed: ${isAllValid}`
+  console.log(stdoutTitle + stdoutInfo + stdoutPass)
 }
 
 // testGetBlockRange()
 // testValidate()
 // testPrintBoard()
 // testSudoku()
-testSudokuMassively(false)
+testSudokuMassively(true)

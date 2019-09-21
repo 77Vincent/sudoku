@@ -4,8 +4,8 @@
  * @email wentianqi77@outlook.com
  */
 
-function sudoku(board) {
-  board = board || new Array(9).fill().map(() => new Array(9).fill(0))
+function sudoku(board = new Array(9).fill().map(() => new Array(9).fill(0))) {
+  board = board.map(row => row.map(su => su))
   const groupedBySu = [ [], [], [], [], [], [], [], [], [] ]
   const existing = []
   const blockCors = [
