@@ -4,8 +4,6 @@
  * @email wentianqi77@outlook.com
  */
 
-const { pick } = require('./utilities')
-
 function sudoku(board) {
   board = board || new Array(9).fill().map(() => new Array(9).fill(0))
   const groupedBySu = [ [], [], [], [], [], [], [], [], [] ]
@@ -33,6 +31,11 @@ function sudoku(board) {
     [6, 6, 6, 7, 7, 7, 8, 8, 8],
     [6, 6, 6, 7, 7, 7, 8, 8, 8],
   ]
+
+  const pick = (...args) => {
+    const seed = 1 + Math.floor(Math.random() * args.length)
+    return args[seed - 1]
+  }
 
   for (let y = 0, len = board.length; y < len; y++) {
     const row = board[y]

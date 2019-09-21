@@ -1,5 +1,4 @@
 const {
-  pick,
   getBlockRange,
   validate,
   printBoard,
@@ -43,23 +42,6 @@ const incompleteBoard = [
   [0, 0, 0, 0, 0, 0, 0, 0, 9],
 ]
 
-function testPick(array) {
-  const iterations = 9999
-  const counter = new Array(array.length).fill(0)
-
-  for (let i = 0; i < iterations; i += 1) {
-    const p = pick(...array)
-    counter[array.indexOf(p)] += 1
-  }
-
-  const total = counter.reduce((a, n) => a + n, 0)
-
-  console.log('Test of pick function:')
-  counter.forEach((num, i) => {
-    console.log('Percent of ' + array[i] + ': ' + num / total)
-  })
-}
-
 function testGetBlockRange() {
   console.log('Test of getBlockRange function:')
   for (let i = 1; i <= 9; i += 1) {
@@ -99,7 +81,6 @@ function testSudoku() {
   }, 0);
 }
 
-// testPick([1, 2, 3])
 // testGetBlockRange()
 // testValidate()
 // testPrintBoard()

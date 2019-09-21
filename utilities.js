@@ -52,12 +52,6 @@ function getBlockRange(blockIndex) {
   }
 }
 
-function pick(...args) {
-  const seed = 1 + Math.floor(Math.random() * args.length)
-
-  return args[seed - 1]
-}
-
 function printBoard(board) {
   const borderRow = new Array(9).fill('+---').map(v => v).join('') + '+\n'
   let borderColumn = ''
@@ -81,7 +75,6 @@ function printBoard(board) {
 
 module.exports = {
   getBlockRange, 
-  pick,
   printBoard,
   validate,
 }
