@@ -7,7 +7,6 @@
 function sudoku(board) {
   board = board || new Array(9).fill().map(() => new Array(9).fill(0))
   const groupedBySu = [ [], [], [], [], [], [], [], [], [] ]
-  const skippedBlocks = [ [], [], [], [], [], [], [], [], [] ]
   const existing = []
   const blockCors = [
     [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]],
@@ -20,17 +19,17 @@ function sudoku(board) {
     [[3, 6], [3, 7], [3, 8], [4, 6], [4, 7], [4, 8], [5, 6], [5, 7], [5, 8]],
     [[6, 6], [6, 7], [6, 8], [7, 6], [7, 7], [7, 8], [8, 6], [8, 7], [8, 8]],
   ]
-  const blockMap = [
-    [0, 0, 0, 1, 1, 1, 2, 2, 2],
-    [0, 0, 0, 1, 1, 1, 2, 2, 2],
-    [0, 0, 0, 1, 1, 1, 2, 2, 2],
-    [3, 3, 3, 4, 4, 4, 5, 5, 5],
-    [3, 3, 3, 4, 4, 4, 5, 5, 5],
-    [3, 3, 3, 4, 4, 4, 5, 5, 5],
-    [6, 6, 6, 7, 7, 7, 8, 8, 8],
-    [6, 6, 6, 7, 7, 7, 8, 8, 8],
-    [6, 6, 6, 7, 7, 7, 8, 8, 8],
-  ]
+  // const blockMap = [
+  //   [0, 0, 0, 1, 1, 1, 2, 2, 2],
+  //   [0, 0, 0, 1, 1, 1, 2, 2, 2],
+  //   [0, 0, 0, 1, 1, 1, 2, 2, 2],
+  //   [3, 3, 3, 4, 4, 4, 5, 5, 5],
+  //   [3, 3, 3, 4, 4, 4, 5, 5, 5],
+  //   [3, 3, 3, 4, 4, 4, 5, 5, 5],
+  //   [6, 6, 6, 7, 7, 7, 8, 8, 8],
+  //   [6, 6, 6, 7, 7, 7, 8, 8, 8],
+  //   [6, 6, 6, 7, 7, 7, 8, 8, 8],
+  // ]
 
   const pick = (...args) => {
     const seed = 1 + Math.floor(Math.random() * args.length)
@@ -41,24 +40,37 @@ function sudoku(board) {
     const row = board[y]
     for (let x = 0, len = row.length; x < len; x++) {
       if (row[x] !== 0) {
-        // Record the block index for existing numbers
-        skippedBlocks[row[x] - 1].push(blockMap[y][x])
         // record the existing ones which are non-zero numbers
         existing.push([x, y])
       }
     }
   }
 
+  let undo = 1
+  let stuckAt = null
   // Actual solving
   for (let suIndex = 0; suIndex < 9; suIndex += 1) {
     const su = suIndex + 1
 
     for (let blockIndex = 0; blockIndex < 9; blockIndex += 1) {
       // Skip blocks where su is already filled in
-      if (skippedBlocks[suIndex].includes(blockIndex)) {
+      // And fill the su into the groupedBySu
+      const blockCor = blockCors[blockIndex]
+      let isExisting = false
+      for (let i = 0; i < blockCor.length; i++) {
+        const cor = blockCor[i]
+        if (board[cor[1]][cor[0]] === su) {
+          groupedBySu[suIndex][blockIndex] = cor
+          isExisting = true
+          break
+        }
+      }
+
+      if (isExisting) {
         continue
       }
 
+      // Brute force
       const availables =  blockCors[blockIndex] 
         // Check occupation
         .filter(cor => board[cor[1]][cor[0]] === 0)
@@ -68,38 +80,65 @@ function sudoku(board) {
         .filter(cor => !board[cor[1]].includes(su))
 
       if (availables.length === 0) {
-        let suCors = groupedBySu[suIndex]
+        const currentFilledLength = groupedBySu[suIndex].length
+        undo = String(stuckAt) == [suIndex, blockIndex] ? undo + 2 : 1 
 
-        for (let i = 0, len = suCors.length; i < len; i++) {
-          const cor = suCors[i]
-          if (
-            !existing.some(existingCor => String(existingCor) === String(cor))
-          ) {
-            board[cor[1]][cor[0]] = 0
-          }
+        if (undo > 5 && suIndex >= 1) {
+          groupedBySu[suIndex].forEach(cor => {
+            if (!existing.some(existingCor => String(existingCor) === String(cor))) {
+              board[cor[1]][cor[0]] = 0
+            }
+          })
+          groupedBySu[suIndex - 1].forEach(cor => {
+            if (!existing.some(existingCor => String(existingCor) === String(cor))) {
+              board[cor[1]][cor[0]] = 0
+            }
+          })
+          groupedBySu[suIndex] = []
+          groupedBySu[suIndex - 1] = []
+          suIndex -= 2
+          break
         }
-        groupedBySu[suIndex] = []
-        suIndex -= 1
 
-        if (suIndex > 0) {
-          suCors = groupedBySu[suIndex]
-          for (let i = 0, len = suCors.length; i < len; i++) {
-            const cor = suCors[i]
-            if (
-              !existing.some(existingCor => String(existingCor) === String(cor))
-            ) {
+        stuckAt = [suIndex, blockIndex]
+
+        // Undo on the current su
+        if (currentFilledLength >= undo) {
+          for (let i = currentFilledLength - 1; i > currentFilledLength - 1 - undo; i--) {
+            const cor = groupedBySu[suIndex][i]
+            if (!existing.some(existingCor => String(existingCor) === String(cor))) {
               board[cor[1]][cor[0]] = 0
             }
           }
-
+          groupedBySu[suIndex] = groupedBySu[suIndex].slice(0, currentFilledLength - undo)
+          blockIndex = blockIndex - undo - 1 
+        } else {
+          const undoOnPreviousRow = undo - currentFilledLength
+          // Undo on the current su
+          for (let i = 0; i < currentFilledLength; i++) {
+            const cor = groupedBySu[suIndex][i]
+            if (!existing.some(existingCor => String(existingCor) === String(cor))) {
+              board[cor[1]][cor[0]] = 0
+            }
+          }
+          // if (undoOnPreviousRow > 3) {
+          //   console.log(undoOnPreviousRow)
+          // }
+          // Undo on the previous su
+          for (let i = 8; i > 8 - undoOnPreviousRow; i--) {
+            const cor = groupedBySu[suIndex - 1][i]
+            if (!existing.some(existingCor => String(existingCor) === String(cor))) {
+              board[cor[1]][cor[0]] = 0
+            }
+          }
           groupedBySu[suIndex] = []
-          suIndex -= 1
+          groupedBySu[suIndex - 1] = groupedBySu[suIndex - 1].slice(0, 9 - undoOnPreviousRow)
+          suIndex -= 2
+          break
         }
-
-        break
       } else {
         const cor = pick(...availables)
-        groupedBySu[suIndex].push(cor)
+        groupedBySu[suIndex][blockIndex] = cor
         board[cor[1]][cor[0]] = su
       }
     }
