@@ -8,8 +8,6 @@ const {
   getBlockRange,
   pick,
   multiplyArray,
-  validate,
-  printBoard,
 } = require('./utilities')
 
 function sudoku(board) {
