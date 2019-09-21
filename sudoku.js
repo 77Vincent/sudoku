@@ -34,8 +34,7 @@ function sudoku(board) {
 
   // Actual solving
   for (let suIndex = 0; suIndex < 9; suIndex += 1) {
-    let su = suIndex + 1
-    groupedBySu[suIndex] = []
+    const su = suIndex + 1
 
     for (let blockIndex = 0; blockIndex < 9; blockIndex += 1) {
       // Skip blocks where su is already filled in
@@ -58,7 +57,7 @@ function sudoku(board) {
         break
       } else {
         const cor = pick(...availables)
-        groupedBySu[suIndex].push(cor)
+        groupedBySu[suIndex][blockIndex] = cor
         const x = groupedBySu[suIndex][blockIndex][0]
         const y = groupedBySu[suIndex][blockIndex][1]
         board[y][x] = su
