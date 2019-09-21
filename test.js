@@ -1,7 +1,6 @@
 const {
   pick,
   getBlockRange,
-  multiplyArray,
   validate,
   printBoard,
 } = require('./utilities')
@@ -74,14 +73,6 @@ function testValidate() {
   console.log('This is an invalid board: ' + validate(invalidBoard))
 }
 
-function testMultiplyArray() {
-  const a = [1,2,3]
-  const b = [4,5,6]
-  console.log('Test of multiplyArray function:')
-  console.log(a, b)
-  console.log(multiplyArray(a, b))
-}
-
 function testPrintBoard() {
   console.log('Test of printBoard function:')
   printBoard(validBoard)
@@ -111,6 +102,5 @@ function testSudoku() {
 // testPick([1, 2, 3])
 // testGetBlockRange()
 // testValidate()
-// testMultiplyArray()
 // testPrintBoard()
 testSudoku()

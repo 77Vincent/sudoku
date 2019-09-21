@@ -52,18 +52,6 @@ function getBlockRange(blockIndex) {
   }
 }
 
-function multiplyArray(arrayA = [], arrayB = []) {
-  const multiplication = []
-
-  arrayA.forEach(a => {
-    arrayB.forEach(b => {
-      multiplication.push([a, b])
-    }) 
-  })
-
-  return multiplication
-}
-
 function pick(...args) {
   const seed = 1 + Math.floor(Math.random() * args.length)
 
@@ -93,7 +81,6 @@ function printBoard(board) {
 
 module.exports = {
   getBlockRange, 
-  multiplyArray,
   pick,
   printBoard,
   validate,
