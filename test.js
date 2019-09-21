@@ -81,7 +81,30 @@ function testSudoku() {
   }, 0);
 }
 
+function testSudokuMassively(usingBlank = true) {
+  const ITERATION = 500
+  const isAllValid = true
+  setTimeout(() => {
+    const start = new Date().getTime()
+    for (let i = 0; i < ITERATION; i++) {
+      const result = usingBlank ? sudoku() : sudoku(incompleteValidBoard)
+      if (validate(result)) {
+        printBoard(result)
+      } else {
+        isAllValid = false
+        break
+      }
+    }
+    const end = new Date().getTime()
+    const stdoutTitle = `Running from ${usingBlank ? 'blank' : 'pre-filled'} board\n`
+    const stdoutInfo = `Iterations: ${ITERATION}\nPer run: ${(end - start) / ITERATION} milliseconds\n`
+    const stdoutPass = `All passed: ${isAllValid}`
+    console.log(stdoutTitle + stdoutInfo + stdoutPass)
+  }, 0);
+}
+
 // testGetBlockRange()
 // testValidate()
 // testPrintBoard()
-testSudoku()
+// testSudoku()
+testSudokuMassively(false)
