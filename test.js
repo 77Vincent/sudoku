@@ -55,21 +55,21 @@ function testPick(array) {
 
   const total = counter.reduce((a, n) => a + n, 0)
 
-  console.log("Test of pick function:")
+  console.log('Test of pick function:')
   counter.forEach((num, i) => {
     console.log('Percent of ' + array[i] + ': ' + num / total)
   })
 }
 
 function testGetBlockRange() {
-  console.log("Test of getBlockRange function:")
+  console.log('Test of getBlockRange function:')
   for (let i = 1; i <= 9; i += 1) {
     console.log(getBlockRange(i))
   }
 }
  
 function testValidate() {
-  console.log("Test of valiate function:")
+  console.log('Test of valiate function:')
   console.log('This is a valid board: ' + validate(validBoard))
   console.log('This is an invalid board: ' + validate(invalidBoard))
 }
@@ -77,25 +77,33 @@ function testValidate() {
 function testMultiplyArray() {
   const a = [1,2,3]
   const b = [4,5,6]
-  console.log("Test of multiplyArray function:")
+  console.log('Test of multiplyArray function:')
   console.log(a, b)
   console.log(multiplyArray(a, b))
 }
 
 function testPrintBoard() {
-  console.log("Test of printBoard function:")
+  console.log('Test of printBoard function:')
   printBoard(validBoard)
 }
 
 function testSudoku() {
   setTimeout(() => {
+    const start = new Date().getTime()
     const resultFromScratch = sudoku()
-    console.log("Result from scratch: " + validate(resultFromScratch))
+    const end = new Date().getTime()
+    const output = `Resolution from blank board: ${validate(resultFromScratch)}\n`
+    const cost = `Cost: ${end - start} milliseconds`
+    console.log(output + cost)
     printBoard(resultFromScratch)
   }, 0);
   setTimeout(() => {
+    const start = new Date().getTime()
     const resultFromIncomplete = sudoku(incompleteBoard)
-    console.log("Result from incomplete: " + validate(resultFromIncomplete))
+    const end = new Date().getTime()
+    const output = `Resolution from incomplete board: ${validate(resultFromIncomplete)}\n`
+    const cost = `Cost: ${end - start} milliseconds`
+    console.log(output + cost)
     printBoard(resultFromIncomplete)
   }, 0);
 }
