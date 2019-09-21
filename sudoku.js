@@ -15,7 +15,14 @@ const {
 function sudoku(board) {
   board = board || new Array(9).fill().map(() => new Array(9).fill(0))
   const groupedBySu = new Array(9).fill().map(() => new Array(9).fill(0))
+  const blockCors = []
   const existing = []
+
+  // Block index starts from 1
+  for (let blockIndex = 0; blockIndex < 9; blockIndex += 1) {
+    const { x, y } = getBlockRange(blockIndex)
+    blockCors.push(multiplyArray(x, y))
+  }
 
   // record the existing ones
   board.forEach((row, y) => row.forEach((num, x) => {
@@ -31,15 +38,12 @@ function sudoku(board) {
     groupedBySu[suIndex] = []
 
     for (let blockIndex = 0; blockIndex < 9; blockIndex += 1) {
-      const range = getBlockRange(blockIndex + 1)
-      const corRange = multiplyArray(range.x, range.y)
-
       // Skip blocks where su is already filled in
-      if (corRange.some(cor => board[cor[1]][cor[0]] === su)) {
+      if (blockCors[blockIndex].some(cor => board[cor[1]][cor[0]] === su)) {
         continue
       }
 
-      const availables = corRange
+      const availables =  blockCors[blockIndex] 
         // Check occupation
         .filter(cor => board[cor[1]][cor[0]] === 0)
         // Check column conflict

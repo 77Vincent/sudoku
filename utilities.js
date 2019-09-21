@@ -23,7 +23,7 @@ function validate(board = []) {
     }
 
     // Validate block
-    const range = getBlockRange(i + 1)
+    const range = getBlockRange(i)
     const block = board 
       .slice(range.x[0], range.x[2] + 1)
       .reduce(
@@ -38,9 +38,10 @@ function validate(board = []) {
   return isRowValid && isColumnValid && isBlockValid
 }
 
-function getBlockRange(i) {
-  let x = i%3 || 3
-  let y = Math.ceil(i/3)
+function getBlockRange(blockIndex) {
+  blockIndex += 1
+  let x = blockIndex%3 || 3
+  let y = Math.ceil(blockIndex/3)
 
   const baseX = (x - 1) * 3
   const baseY = (y - 1) * 3

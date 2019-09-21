@@ -37,7 +37,7 @@ function testGetBlockRange() {
     console.log(getBlockRange(i))
   }
 }
-
+ 
 function testValidate() {
   console.log("Test of valiate function:")
   console.log('This is a valid board: ' + validate(validBoard))
