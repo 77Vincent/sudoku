@@ -82,10 +82,10 @@ function sudoku(board) {
       if (availables.length === 0) {
         const currentSuGroup = groupedBySu[suIndex]
         const previousSuGroup = groupedBySu[suIndex - 1]
-        const currentFilledLength = currentSuGroup.length
 
         undo = stuckAt[0] === suIndex && stuckAt[1] === blockIndex ? undo + 1 : 1 
 
+        // Directly retry from the beginning of the previous su
         if (undo > 4 && suIndex >= 1) {
           currentSuGroup.forEach(cor => {
             if (!existing.some(existingCor => existingCor[0] === cor[0] && existingCor[1] === cor[1])) {
@@ -106,16 +106,16 @@ function sudoku(board) {
         stuckAt = [suIndex, blockIndex]
 
         // Undo on the current su
-        const undoOnPreviousSuTo = undo - currentFilledLength
-        const undoOnCurrentSuTo = undoOnPreviousSuTo > 0 ? 0 : currentFilledLength - undo
+        const undoOnPreviousSuTo = undo - blockIndex 
+        const undoOnCurrentSuTo = undoOnPreviousSuTo > 0 ? 0 : blockIndex - undo
 
-        for (let i = currentFilledLength - 1; i > undoOnCurrentSuTo - 1; i--) {
+        for (let i = blockIndex - 1; i > undoOnCurrentSuTo - 1; i--) {
           const cor = currentSuGroup[i]
           if (!existing.some(existingCor => existingCor[0] === cor[0] && existingCor[1] === cor[1])) {
             board[cor[1]][cor[0]] = 0
           }
         }
-        groupedBySu[suIndex] = currentSuGroup.slice(0, currentFilledLength - undo)
+        groupedBySu[suIndex] = currentSuGroup.slice(0, blockIndex - undo)
         blockIndex = blockIndex - undo - 1 
 
         // Undo on the previous su
