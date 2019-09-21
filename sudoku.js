@@ -20,13 +20,12 @@ function sudoku(board) {
   // record the existing ones
   board.forEach((row, y) => row.forEach((num, x) => {
     if (num !== 0) {
-      existing.push({
-        value: num,
-        cor: [x, y]
-      })
+      const blockIndex = whichBlock(x, y)
+      existing.push([x, y])
     }
   }))
 
+  // Actual solving
   for (let suIndex = 0; suIndex < 9; suIndex += 1) {
     let su = suIndex + 1
     groupedBySu[suIndex] = []
