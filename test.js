@@ -30,16 +30,16 @@ const invalidBoard = [
   [5, 7, 4, 9, 3, 8, 2, 3, 1],
 ]
 
-const incompleteBoard = [
+const incompleteValidBoard = [
   [1, 0, 0, 0, 0, 0, 0, 0, 2],
-  [0, 2, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 3, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 4, 0, 0, 0, 0, 0],
+  [0, 2, 0, 0, 0, 0, 0, 3, 0],
+  [0, 0, 3, 0, 0, 0, 4, 0, 0],
+  [0, 0, 0, 4, 0, 7, 0, 0, 0],
   [0, 0, 0, 0, 5, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 6, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 7, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 8, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 9],
+  [0, 0, 0, 8, 0, 6, 0, 0, 0],
+  [0, 0, 1, 0, 0, 0, 7, 0, 0],
+  [0, 9, 0, 0, 0, 0, 0, 8, 0],
+  [6, 0, 0, 0, 0, 0, 0, 0, 9],
 ]
 
 function testGetBlockRange() {
@@ -72,7 +72,7 @@ function testSudoku() {
   }, 0);
   setTimeout(() => {
     const start = new Date().getTime()
-    const resultFromIncomplete = sudoku(incompleteBoard)
+    const resultFromIncomplete = sudoku(incompleteValidBoard)
     const end = new Date().getTime()
     const output = `Resolution from incomplete board: ${validate(resultFromIncomplete)}\n`
     const cost = `Cost: ${end - start} milliseconds`

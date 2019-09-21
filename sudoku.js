@@ -81,9 +81,9 @@ function sudoku(board) {
 
       if (availables.length === 0) {
         const currentFilledLength = groupedBySu[suIndex].length
-        undo = String(stuckAt) == [suIndex, blockIndex] ? undo + 2 : 1 
+        undo = String(stuckAt) == [suIndex, blockIndex] ? undo + 1 : 1 
 
-        if (undo > 5 && suIndex >= 1) {
+        if (undo > 4 && suIndex >= 1) {
           groupedBySu[suIndex].forEach(cor => {
             if (!existing.some(existingCor => String(existingCor) === String(cor))) {
               board[cor[1]][cor[0]] = 0
@@ -121,9 +121,6 @@ function sudoku(board) {
               board[cor[1]][cor[0]] = 0
             }
           }
-          // if (undoOnPreviousRow > 3) {
-          //   console.log(undoOnPreviousRow)
-          // }
           // Undo on the previous su
           for (let i = 8; i > 8 - undoOnPreviousRow; i--) {
             const cor = groupedBySu[suIndex - 1][i]
