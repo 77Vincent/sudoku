@@ -22,11 +22,14 @@ function sudoku(board) {
   }
 
   // record the existing ones which are non-zero numbers
-  board.forEach((row, y) => row.forEach((num, x) => {
-    if (num !== 0) {
-      existing.push([x, y])
+  for (let y = 0, len = board.length; y < len; y++) {
+    const row = board[y]
+    for (let x = 0, len = row.length; x < len; x++) {
+      if (row[x] !== 0) {
+        existing.push([x, y])
+      }
     }
-  }))
+  }
 
   // Actual solving
   for (let suIndex = 0; suIndex < 9; suIndex += 1) {
