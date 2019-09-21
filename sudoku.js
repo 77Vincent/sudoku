@@ -12,7 +12,7 @@ const {
 
 function sudoku(board) {
   board = board || new Array(9).fill().map(() => new Array(9).fill(0))
-  const groupedBySu = new Array(9).fill().map(() => new Array(9).fill(0))
+  // const groupedBySu = new Array(9).fill().map(() => new Array(9).fill(0))
   const blockCors = []
   const existing = []
 
@@ -25,7 +25,6 @@ function sudoku(board) {
   // record the existing ones
   board.forEach((row, y) => row.forEach((num, x) => {
     if (num !== 0) {
-      const blockIndex = whichBlock(x, y)
       existing.push([x, y])
     }
   }))
@@ -50,15 +49,25 @@ function sudoku(board) {
 
       if (availables.length === 0) {
         suIndex -= 2
-        board = board.map(row => row.map(num => num === su ? 0 : num))
-        board = board.map(row => row.map(num => num === su - 1 ? 0 : num))
+        board = board.map((row, y) => {
+          return row.map((num, x) => {
+            if (
+              existing.some(cor => String(cor) === String([x, y]))
+            ) {
+              return num
+            } else {
+              return num === su || num === su - 1 ? 0 : num
+            }
+          })
+        })
+
         break
       } else {
         const cor = pick(...availables)
-        groupedBySu[suIndex][blockIndex] = cor
-        const x = groupedBySu[suIndex][blockIndex][0]
-        const y = groupedBySu[suIndex][blockIndex][1]
-        board[y][x] = su
+        // groupedBySu[suIndex][blockIndex] = cor
+        // const x = groupedBySu[suIndex][blockIndex][0]
+        // const y = groupedBySu[suIndex][blockIndex][1]
+        board[cor[1]][cor[0]] = su
       }
     }
   }

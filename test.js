@@ -34,14 +34,14 @@ const invalidBoard = [
 
 const incompleteBoard = [
   [1, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 2, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 3, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 4, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 5, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 6, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 7, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 8, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 9],
 ]
 
 function testPick(array) {
@@ -87,10 +87,17 @@ function testPrintBoard() {
   printBoard(validBoard)
 }
 
-function testSudoku(board) {
-  const result = sudoku(board)
-  printBoard(result)
-  console.log(validate(result))
+function testSudoku() {
+  setTimeout(() => {
+    const resultFromScratch = sudoku()
+    console.log("Result from scratch: " + validate(resultFromScratch))
+    printBoard(resultFromScratch)
+  }, 0);
+  setTimeout(() => {
+    const resultFromIncomplete = sudoku(incompleteBoard)
+    console.log("Result from incomplete: " + validate(resultFromIncomplete))
+    printBoard(resultFromIncomplete)
+  }, 0);
 }
 
 // testPick([1, 2, 3])
