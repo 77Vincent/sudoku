@@ -47,7 +47,7 @@ function sudoku(board) {
   }
 
   let undo = 1
-  let stuckAt = null
+  let stuckAt = [] 
   // Actual solving
   for (let suIndex = 0; suIndex < 9; suIndex += 1) {
     const su = suIndex + 1
@@ -81,16 +81,16 @@ function sudoku(board) {
 
       if (availables.length === 0) {
         const currentFilledLength = groupedBySu[suIndex].length
-        undo = String(stuckAt) == [suIndex, blockIndex] ? undo + 1 : 1 
+        undo = stuckAt[0] === suIndex && stuckAt[1] === blockIndex ? undo + 1 : 1 
 
         if (undo > 4 && suIndex >= 1) {
           groupedBySu[suIndex].forEach(cor => {
-            if (!existing.some(existingCor => String(existingCor) === String(cor))) {
+            if (!existing.some(existingCor => existingCor[0] === cor[0] && existingCor[1] === cor[1])) {
               board[cor[1]][cor[0]] = 0
             }
           })
           groupedBySu[suIndex - 1].forEach(cor => {
-            if (!existing.some(existingCor => String(existingCor) === String(cor))) {
+            if (!existing.some(existingCor => existingCor[0] === cor[0] && existingCor[1] === cor[1])) {
               board[cor[1]][cor[0]] = 0
             }
           })
@@ -106,7 +106,7 @@ function sudoku(board) {
         if (currentFilledLength >= undo) {
           for (let i = currentFilledLength - 1; i > currentFilledLength - 1 - undo; i--) {
             const cor = groupedBySu[suIndex][i]
-            if (!existing.some(existingCor => String(existingCor) === String(cor))) {
+            if (!existing.some(existingCor => existingCor[0] === cor[0] && existingCor[1] === cor[1])) {
               board[cor[1]][cor[0]] = 0
             }
           }
@@ -117,14 +117,14 @@ function sudoku(board) {
           // Undo on the current su
           for (let i = 0; i < currentFilledLength; i++) {
             const cor = groupedBySu[suIndex][i]
-            if (!existing.some(existingCor => String(existingCor) === String(cor))) {
+            if (!existing.some(existingCor => existingCor[0] === cor[0] && existingCor[1] === cor[1])) {
               board[cor[1]][cor[0]] = 0
             }
           }
           // Undo on the previous su
           for (let i = 8; i > 8 - undoOnPreviousRow; i--) {
             const cor = groupedBySu[suIndex - 1][i]
-            if (!existing.some(existingCor => String(existingCor) === String(cor))) {
+            if (!existing.some(existingCor => existingCor[0] === cor[0] && existingCor[1] === cor[1])) {
               board[cor[1]][cor[0]] = 0
             }
           }
