@@ -13,19 +13,32 @@ const {
 function sudoku(board) {
   board = board || new Array(9).fill().map(() => new Array(9).fill(0))
   const groupedBySu = [ [], [], [], [], [], [], [], [], [] ]
+  const skippedBlocks = [ [], [], [], [], [], [], [], [], [] ]
   const blockCors = []
   const existing = []
-
+  const blockMap = [
+    [0, 0, 0, 1, 1, 1, 2, 2, 2],
+    [0, 0, 0, 1, 1, 1, 2, 2, 2],
+    [0, 0, 0, 1, 1, 1, 2, 2, 2],
+    [3, 3, 3, 4, 4, 4, 5, 5, 5],
+    [3, 3, 3, 4, 4, 4, 5, 5, 5],
+    [3, 3, 3, 4, 4, 4, 5, 5, 5],
+    [6, 6, 6, 7, 7, 7, 8, 8, 8],
+    [6, 6, 6, 7, 7, 7, 8, 8, 8],
+    [6, 6, 6, 7, 7, 7, 8, 8, 8],
+  ]
   for (let blockIndex = 0; blockIndex < 9; blockIndex += 1) {
     const { x, y } = getBlockRange(blockIndex)
     blockCors.push(multiplyArray(x, y))
   }
 
-  // record the existing ones which are non-zero numbers
   for (let y = 0, len = board.length; y < len; y++) {
     const row = board[y]
     for (let x = 0, len = row.length; x < len; x++) {
       if (row[x] !== 0) {
+        // Record the block index for existing numbers
+        skippedBlocks[row[x] - 1].push(blockMap[y][x])
+        // record the existing ones which are non-zero numbers
         existing.push([x, y])
       }
     }
@@ -37,9 +50,12 @@ function sudoku(board) {
 
     for (let blockIndex = 0; blockIndex < 9; blockIndex += 1) {
       // Skip blocks where su is already filled in
-      if (blockCors[blockIndex].some(cor => board[cor[1]][cor[0]] === su)) {
+      if (skippedBlocks[suIndex].includes(blockIndex)) {
         continue
       }
+      // if (blockCors[blockIndex].some(cor => board[cor[1]][cor[0]] === su)) {
+      //   continue
+      // }
 
       const availables =  blockCors[blockIndex] 
         // Check occupation
@@ -51,6 +67,7 @@ function sudoku(board) {
 
       if (availables.length === 0) {
         let suCors = groupedBySu[suIndex]
+
         for (let i = 0, len = suCors.length; i < len; i++) {
           const cor = suCors[i]
           if (
@@ -59,9 +76,11 @@ function sudoku(board) {
             board[cor[1]][cor[0]] = 0
           }
         }
+        groupedBySu[suIndex] = []
+        suIndex -= 1
 
-        if (suIndex > 1) {
-          suCors = groupedBySu[suIndex - 1]
+        if (suIndex > 0) {
+          suCors = groupedBySu[suIndex]
           for (let i = 0, len = suCors.length; i < len; i++) {
             const cor = suCors[i]
             if (
@@ -72,10 +91,9 @@ function sudoku(board) {
           }
 
           groupedBySu[suIndex] = []
-          groupedBySu[suIndex - 1] = []
+          suIndex -= 1
         }
 
-        suIndex -= 2
         break
       } else {
         const cor = pick(...availables)
