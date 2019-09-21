@@ -106,33 +106,27 @@ function sudoku(board) {
         stuckAt = [suIndex, blockIndex]
 
         // Undo on the current su
-        if (currentFilledLength >= undo) {
-          for (let i = currentFilledLength - 1; i > currentFilledLength - 1 - undo; i--) {
-            const cor = currentSuGroup[i]
-            if (!existing.some(existingCor => existingCor[0] === cor[0] && existingCor[1] === cor[1])) {
-              board[cor[1]][cor[0]] = 0
-            }
+        const undoOnPreviousSuTo = undo - currentFilledLength
+        const undoOnCurrentSuTo = undoOnPreviousSuTo > 0 ? 0 : currentFilledLength - undo
+
+        for (let i = currentFilledLength - 1; i > undoOnCurrentSuTo - 1; i--) {
+          const cor = currentSuGroup[i]
+          if (!existing.some(existingCor => existingCor[0] === cor[0] && existingCor[1] === cor[1])) {
+            board[cor[1]][cor[0]] = 0
           }
-          groupedBySu[suIndex] = currentSuGroup.slice(0, currentFilledLength - undo)
-          blockIndex = blockIndex - undo - 1 
-        } else {
-          const undoOnPreviousRow = undo - currentFilledLength
-          // Undo on the current su
-          for (let i = 0; i < currentFilledLength; i++) {
-            const cor = currentSuGroup[i]
-            if (!existing.some(existingCor => existingCor[0] === cor[0] && existingCor[1] === cor[1])) {
-              board[cor[1]][cor[0]] = 0
-            }
-          }
-          // Undo on the previous su
-          for (let i = 8; i > 8 - undoOnPreviousRow; i--) {
+        }
+        groupedBySu[suIndex] = currentSuGroup.slice(0, currentFilledLength - undo)
+        blockIndex = blockIndex - undo - 1 
+
+        // Undo on the previous su
+        if (undoOnPreviousSuTo > 0) {
+          for (let i = 8; i > 8 - undoOnPreviousSuTo; i--) {
             const cor = previousSuGroup[i]
             if (!existing.some(existingCor => existingCor[0] === cor[0] && existingCor[1] === cor[1])) {
               board[cor[1]][cor[0]] = 0
             }
           }
-          groupedBySu[suIndex] = []
-          groupedBySu[suIndex - 1] = previousSuGroup.slice(0, 9 - undoOnPreviousRow)
+          groupedBySu[suIndex - 1] = previousSuGroup.slice(0, 9 - undoOnPreviousSuTo)
           suIndex -= 2
           break
         }
