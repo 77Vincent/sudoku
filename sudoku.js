@@ -21,7 +21,7 @@ function sudoku(board) {
     blockCors.push(multiplyArray(x, y))
   }
 
-  // record the existing ones
+  // record the existing ones which are non-zero numbers
   board.forEach((row, y) => row.forEach((num, x) => {
     if (num !== 0) {
       existing.push([x, y])
@@ -47,22 +47,27 @@ function sudoku(board) {
         .filter(cor => !board[cor[1]].includes(su))
 
       if (availables.length === 0) {
-        groupedBySu[suIndex].forEach(cor => {
+        let suCors = groupedBySu[suIndex]
+        for (let i = 0, len = suCors.length; i < len; i++) {
+          const cor = suCors[i]
           if (
             !existing.some(existingCor => String(existingCor) === String(cor))
           ) {
             board[cor[1]][cor[0]] = 0
           }
-        })
+        }
 
         if (suIndex > 1) {
-          groupedBySu[suIndex - 1].forEach(cor => {
+          suCors = groupedBySu[suIndex - 1]
+          for (let i = 0, len = suCors.length; i < len; i++) {
+            const cor = suCors[i]
             if (
               !existing.some(existingCor => String(existingCor) === String(cor))
             ) {
               board[cor[1]][cor[0]] = 0
             }
-          })
+          }
+
           groupedBySu[suIndex] = []
           groupedBySu[suIndex - 1] = []
         }
