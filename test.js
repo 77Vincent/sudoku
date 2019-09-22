@@ -61,7 +61,11 @@ function testSudoku() {
     process.stdout.write(colorize(92, divider))
     process.stdout.write(`COSTS: ${end - start} milliseconds\n`)
     process.stdout.write(`PASS : ${validate(result)}\n`)
-    print(result)
+    if (i === 0) {
+      print(result)
+    } else {
+      print(result, incompleteValidBoard)
+    }
   }
 }
 
