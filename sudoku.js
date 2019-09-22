@@ -26,6 +26,10 @@ const blockIndexMap = [
   [6, 6, 6, 7, 7, 7, 8, 8, 8],
 ]
 
+function colorize(color, output) {
+  return ['\033[', color, 'm', output, '\033[0m'].join('');
+}
+
 function validate(board = []) {
   for (let i = 0; i < 9; i += 1) {
     // Eliminate zero
@@ -50,24 +54,18 @@ function validate(board = []) {
 }
 
 function print(board) {
-  const borderRow = '+---+---+---+---+---+---+---+---+---+\n'
-  let borderColumn = ''
-  let output = ''
+  const ROW = '+---+---+---+---+---+---+---+---+---+\n'
+  const COLOR = 92
 
   for (let y = 0; y < 9; y += 1) {
-    output += borderRow
-
-    borderColumn = ''
-
+    process.stdout.write(colorize(y%3 === 0 ? COLOR : 0, ROW))
     for (let x = 0; x < 9; x += 1) {
-      borderColumn += '| ' + (board[y][x] || ' ') + ' '
+      process.stdout.write(colorize(x%3 === 0 ? COLOR : 0, '|'))
+      process.stdout.write(' ' + board[y][x] + ' ')
     }
-    borderColumn += '|\n'
-
-    output += borderColumn
+    process.stdout.write(colorize(COLOR, '|\n'))
   }
-  output += borderRow
-  process.stdout.write(output)
+  process.stdout.write(colorize(COLOR, ROW))
 }
 
 
@@ -143,6 +141,7 @@ function solve(inputBoard) {
 }
 
 module.exports = {
+  colorize,
   print,
   solve,
   validate,

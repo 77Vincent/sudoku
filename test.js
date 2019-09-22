@@ -1,4 +1,5 @@
 const {
+  colorize,
   print,
   solve,
   validate,
@@ -40,13 +41,14 @@ const incompleteValidBoard = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
 
-const divider = '\n========================================\n'
+const divider = '\n================== TEST BEGIN ==================\n'
 
 function testValidate() {
-  const valid = `VALID: ${validate(validBoard)}\n`
-  const invalid = `INVALID: ${validate(invalidBoard)}\n`
-  const incompleteValid = `INCOMPLETE/VALID: ${validate(incompleteValidBoard)}`
-  console.log(divider + valid + invalid + incompleteValid)
+  const valid = `VALID     : ${validate(validBoard)}\n`
+  const invalid = `INVALID   : ${validate(invalidBoard)}\n`
+  const incompleteValid = `INCOMPLETE: ${validate(incompleteValidBoard)}`
+  process.stdout.write(colorize(92, divider))
+  process.stdout.write(valid + invalid + incompleteValid)
 }
 
 function testSudoku() {
@@ -54,18 +56,20 @@ function testSudoku() {
     const start = new Date().getTime()
     const result = solve()
     const end = new Date().getTime()
-    const output = `Resolution from BLANK board: ${validate(result)}\n`
-    const cost = `Cost: ${end - start} milliseconds`
-    console.log(divider + output + cost)
+    const output = `FROM : blank / ${validate(result)}\n`
+    const cost = `COSTS: ${end - start} milliseconds\n`
+    process.stdout.write(colorize(92, divider))
+    process.stdout.write(output + cost)
     print(result)
   }, 0);
   setTimeout(() => {
     const start = new Date().getTime()
     const result = solve(incompleteValidBoard)
     const end = new Date().getTime()
-    const output = `Resolution from INCOMPLETE/VALID board: ${validate(result)}\n`
-    const cost = `Cost: ${end - start} milliseconds`
-    console.log(divider + output + cost)
+    const output = `FROM : incomplete / ${validate(result)}\n`
+    const cost = `COSTS: ${end - start} milliseconds\n`
+    process.stdout.write(colorize(92, divider))
+    process.stdout.write(output + cost)
     print(result)
   }, 0);
 }
@@ -85,10 +89,11 @@ function bulkTestSudoku(usingBlank = true) {
   }
   const end = new Date().getTime()
 
-  const stdoutTitle = `Running from ${usingBlank ? 'BLANK' : 'INCOMPLETE'} board\n`
-  const stdoutInfo = `Iterations: ${ITERATION}\nPer run: ${(end - start) / ITERATION} milliseconds\n`
-  const stdoutPass = `All passed: ${isAllValid}`
-  console.log(divider + stdoutTitle + stdoutInfo + stdoutPass)
+  const stdoutTitle = `FROM      : ${usingBlank ? 'blank' : 'imcomplete'}\n`
+  const stdoutInfo = `ITERATIONS: ${ITERATION}\nPER RUN   : ${(end - start) / ITERATION} milliseconds\n`
+  const stdoutPass = `PASS      : ${isAllValid}`
+  process.stdout.write(colorize(92, divider))
+  process.stdout.write(stdoutTitle + stdoutInfo + stdoutPass)
 }
 
 testValidate()
