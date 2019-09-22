@@ -40,15 +40,13 @@ const incompleteValidBoard = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
 
-function testValidate() {
-  console.log('Test of valiate function:')
-  console.log('This is a valid board: ' + validate(validBoard))
-  console.log('This is an invalid board: ' + validate(invalidBoard))
-}
+const divider = '\n========================================\n'
 
-function testPrint() {
-  console.log('Test of print function:')
-  print(validBoard)
+function testValidate() {
+  const valid = `VALID: ${validate(validBoard)}\n`
+  const invalid = `INVALID: ${validate(invalidBoard)}\n`
+  const incompleteValid = `INCOMPLETE/VALID: ${validate(incompleteValidBoard)}`
+  console.log(divider + valid + invalid + incompleteValid)
 }
 
 function testSudoku() {
@@ -56,23 +54,23 @@ function testSudoku() {
     const start = new Date().getTime()
     const result = solve()
     const end = new Date().getTime()
-    const output = `Resolution from blank board: ${validate(result)}\n`
+    const output = `Resolution from BLANK board: ${validate(result)}\n`
     const cost = `Cost: ${end - start} milliseconds`
-    console.log(output + cost)
+    console.log(divider + output + cost)
     print(result)
   }, 0);
   setTimeout(() => {
     const start = new Date().getTime()
     const result = solve(incompleteValidBoard)
     const end = new Date().getTime()
-    const output = `Resolution from incomplete board: ${validate(result)}\n`
+    const output = `Resolution from INCOMPLETE/VALID board: ${validate(result)}\n`
     const cost = `Cost: ${end - start} milliseconds`
-    console.log(output + cost)
+    console.log(divider + output + cost)
     print(result)
   }, 0);
 }
 
-function testSudokuMassively(usingBlank = true) {
+function bulkTestSudoku(usingBlank = true) {
   const ITERATION = 500
   let isAllValid = true
   const start = new Date().getTime()
@@ -86,13 +84,13 @@ function testSudokuMassively(usingBlank = true) {
     }
   }
   const end = new Date().getTime()
-  const stdoutTitle = `Running from ${usingBlank ? 'blank' : 'pre-filled'} board\n`
+
+  const stdoutTitle = `Running from ${usingBlank ? 'BLANK' : 'INCOMPLETE'} board\n`
   const stdoutInfo = `Iterations: ${ITERATION}\nPer run: ${(end - start) / ITERATION} milliseconds\n`
   const stdoutPass = `All passed: ${isAllValid}`
-  console.log(stdoutTitle + stdoutInfo + stdoutPass)
+  console.log(divider + stdoutTitle + stdoutInfo + stdoutPass)
 }
 
 testValidate()
-testPrint()
 testSudoku()
-testSudokuMassively()
+bulkTestSudoku()

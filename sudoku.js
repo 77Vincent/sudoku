@@ -27,31 +27,26 @@ const blockIndexMap = [
 ]
 
 function validate(board = []) {
-  let isValid = true
-
   for (let i = 0; i < 9; i += 1) {
     // Eliminate zero
     board[i] = board[i].filter(i => i !== 0)
     
     // Validate row
     if (new Set(board[i]).size !== 9) {
-      isValid = false
-      break
+      return false
     }
 
     // Validate column
     if (new Set(board.map(row => row[i])).size !== 9) {
-      isValid = false
-      break
+      return false
     }
 
     // Validate block
     if (new Set(blockCors[i].map(cor => board[cor[1]][cor[0]])).size !== 9) {
-      isValid = false
-      break
+      return false
     }
   }
-  return isValid
+  return true 
 }
 
 function print(board) {
@@ -72,7 +67,7 @@ function print(board) {
     output += borderColumn
   }
   output += borderRow
-  console.log(output)
+  process.stdout.write(output)
 }
 
 
