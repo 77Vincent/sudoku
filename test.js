@@ -60,7 +60,7 @@ function testSudoku() {
     process.stdout.write(colorize(92, `\n\nTEST OF SOLVER FROM ${type}\n`))
     process.stdout.write(colorize(92, divider))
     process.stdout.write(`COSTS : ${end - start} milliseconds\n`)
-    process.stdout.write(`PASS  : ${validate(result)}\n`)
+    process.stdout.write(`VALID : ${validate(result)}\n`)
     if (i === 0) {
       print(result)
     } else {
@@ -88,15 +88,24 @@ function bulkTestSudoku() {
   const ITERATION = 500
   for (let i = 0; i < 2; i++) {
     let isAllValid = true
+    let isAllIntact = true
     const type = i === 0 ? 'SCRATCH' : 'INCOMPLETE'
     const start = new Date().getTime()
     for (let i = 0; i < ITERATION; i++) {
       const result = i === 0 ? solve() : solve(incompleteValidBoard)
+      for (let y = 0; y < 9; y++) {
+        for (let x = 0; x < 9; x++) {
+          const n = incompleteValidBoard[y][x]
+          if (n !== 0 && n !== result[y][x]) {
+            isAllIntact = false
+            break
+          }
+        }
+      }
       if (validate(result)) {
         continue
       } else {
         isAllValid = false
-        break
       }
     }
     const end = new Date().getTime()
@@ -105,7 +114,10 @@ function bulkTestSudoku() {
     process.stdout.write(`ITERATIONS: ${ITERATION}\n`)
     process.stdout.write(`COSTS     : ${end - start} milliseconds\n`)
     process.stdout.write(`PER RUN   : ${(end - start) / ITERATION} milliseconds\n`)
-    process.stdout.write(`PASS      : ${isAllValid}\n`)
+    process.stdout.write(`ALL VALID : ${isAllValid}\n`)
+    if (i === 1) {
+      process.stdout.write(`ALL INTACT: ${isAllIntact}\n`)
+    }
   }
 }
 
