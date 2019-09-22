@@ -82,11 +82,9 @@ function print(board, inputBoard) {
 }
 
 
-function solve(inputBoard) {
+function solve(inputBoard = [[], [], [], [], [], [], [], [], []]) {
   // copy the origin board
-  const board = inputBoard
-    ? inputBoard.map(row => row.map(num => num))
-    : [ [], [], [], [], [], [], [], [], [] ]
+  const board = inputBoard.map(row => row.map(n => n))
   const pick = (...args) => {
     const seed = 1 + Math.floor(Math.random() * args.length)
     return args[seed - 1]
@@ -110,39 +108,52 @@ function solve(inputBoard) {
       const picked = blockCors[blockIndexMap[y][x]].map(cor => board[cor[1]][cor[0]])
       availables = availables.filter(num => !picked.includes(num) && num !== lastChosen)
       
-      if (availables.length === 0 && y >= 1) {
-        tried += 1 
-        x = x - tried
+      if (availables.length === 0) {
+        if (y === 0) {
+          tried += 1 
+          x = x - tried >= 0 ? x - tried : 0
 
-        if (tried >= 5) { // 5 is the best try
-          board[y] = []
-          board[y - 1] = []
+          lastChosen = board[y][x]
+          board[y].splice(x)
+          board[y].concat(inputBoard[y].map(n => n).splice(x))
+          x--
+          continue
+        } else if (y === 1) {
+          board[y] = inputBoard[y].map(n => n)
+          board[y - 1] = inputBoard[y - 1].map(n => n)
           tried = 0
           y -= 2
           lastChosen = null
           break
-        } else {
-          if (x >= 0) {
-            lastChosen = board[y][x]
-            board[y].splice(x)
-            x--
-            continue
-          } else {
-            board[y] = []
-            lastChosen = board[y - 1][8 + x]
-            board[y - 1].splice(9 + x)
-            y -= 2
+        } else if (y >= 2) {
+          tried += 1 
+          x = x - tried
+
+          if (tried >= 5) {
+            board[y] = inputBoard[y].map(n => n)
+            board[y - 1] = inputBoard[y - 1].map(n => n)
+            board[y - 2] = inputBoard[y - 2].map(n => n)
+            tried = 0
+            y -= 3 
+            lastChosen = null
             break
+          } else {
+            if (x >= 0) {
+              lastChosen = board[y][x]
+              board[y].splice(x)
+              board[y].concat(inputBoard[y].map(n => n).splice(x))
+              x--
+              continue
+            } else {
+              lastChosen = board[y - 1][8 + x]
+              board[y] = inputBoard[y].map(n => n)
+              board[y - 1].splice(9 + x)
+              board[y - 1].concat(inputBoard[y - 1].map(n => n).splice(9 + x))
+              y -= 2
+              break
+            }
           }
         }
-      } else if (availables.length === 0 && y === 0) {
-        tried += 1 
-        x = x - tried >= 0 ? x - tried : 0
-
-        lastChosen = board[y][x]
-        board[y].splice(x)
-        x--
-        continue
       } else {
         board[y][x] = su || pick(...availables)
         lastChosen = null
