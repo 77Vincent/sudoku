@@ -105,4 +105,4 @@ function testSudokuMassively(usingBlank = true) {
 // testValidate()
 // testPrintBoard()
 // testSudoku()
-testSudokuMassively()
+testSudokuMassively(false)

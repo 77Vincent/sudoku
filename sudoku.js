@@ -58,7 +58,7 @@ function sudoku(inputBoard) {
         tried += 1 
         x = x - tried
 
-        if (tried >= 4) {
+        if (tried >= 5) { // 5 is the best try
           board[y] = []
           board[y - 1] = []
           tried = 0
@@ -68,12 +68,13 @@ function sudoku(inputBoard) {
         } else {
           if (x >= 0) {
             lastChosen = board[y][x]
-            board[y].splice(x + 1)
+            board[y].splice(x)
+            x--
             continue
           } else {
             board[y] = []
-            board[y - 1].splice(9 + x)
             lastChosen = board[y - 1][8 + x]
+            board[y - 1].splice(9 + x)
             y -= 2
             break
           }
@@ -81,8 +82,10 @@ function sudoku(inputBoard) {
       } else if (availables.length === 0 && y === 0) {
         tried += 1 
         x = x - tried >= 0 ? x - tried : 0
+
         lastChosen = board[y][x]
-        board[y].splice(x + 1)
+        board[y].splice(x)
+        x--
         continue
       } else {
         board[y][x] = su || pick(...availables)
