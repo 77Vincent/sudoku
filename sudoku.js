@@ -62,12 +62,10 @@ function print(board) {
     if (y%3 === 0) {
       process.stdout.write(colorize(BORDER_COLOR, ROW))
     } else {
-      process.stdout.write(colorize(BORDER_COLOR, '+'))
-      process.stdout.write(colorize(REGULAR_COLOR, '---+---+---'))
-      process.stdout.write(colorize(BORDER_COLOR, '+'))
-      process.stdout.write(colorize(REGULAR_COLOR, '---+---+---'))
-      process.stdout.write(colorize(BORDER_COLOR, '+'))
-      process.stdout.write(colorize(REGULAR_COLOR, '---+---+---'))
+      for (let i = 0; i < 3; i++) {
+        process.stdout.write(colorize(BORDER_COLOR, '+'))
+        process.stdout.write(colorize(REGULAR_COLOR, '---+---+---'))
+      }
       process.stdout.write(colorize(BORDER_COLOR, '+\n'))
     }
     for (let x = 0; x < 9; x += 1) {
