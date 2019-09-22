@@ -1,10 +1,8 @@
 const {
-  getBlockRange,
+  print,
+  solve,
   validate,
-  printBoard,
-} = require('./utilities')
-
-const sudoku = require('./sudoku')
+} = require('./sudoku')
 
 const validBoard = [
   [1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -42,42 +40,35 @@ const incompleteValidBoard = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
 
-function testGetBlockRange() {
-  console.log('Test of getBlockRange function:')
-  for (let i = 1; i <= 9; i += 1) {
-    console.log(getBlockRange(i))
-  }
-}
- 
 function testValidate() {
   console.log('Test of valiate function:')
   console.log('This is a valid board: ' + validate(validBoard))
   console.log('This is an invalid board: ' + validate(invalidBoard))
 }
 
-function testPrintBoard() {
-  console.log('Test of printBoard function:')
-  printBoard(validBoard)
+function testPrint() {
+  console.log('Test of print function:')
+  print(validBoard)
 }
 
 function testSudoku() {
   setTimeout(() => {
     const start = new Date().getTime()
-    const result = sudoku()
+    const result = solve()
     const end = new Date().getTime()
     const output = `Resolution from blank board: ${validate(result)}\n`
     const cost = `Cost: ${end - start} milliseconds`
     console.log(output + cost)
-    printBoard(result)
+    print(result)
   }, 0);
   setTimeout(() => {
     const start = new Date().getTime()
-    const result = sudoku(incompleteValidBoard)
+    const result = solve(incompleteValidBoard)
     const end = new Date().getTime()
     const output = `Resolution from incomplete board: ${validate(result)}\n`
     const cost = `Cost: ${end - start} milliseconds`
     console.log(output + cost)
-    printBoard(result)
+    print(result)
   }, 0);
 }
 
@@ -86,9 +77,9 @@ function testSudokuMassively(usingBlank = true) {
   let isAllValid = true
   const start = new Date().getTime()
   for (let i = 0; i < ITERATION; i++) {
-    const result = usingBlank ? sudoku() : sudoku(incompleteValidBoard)
+    const result = usingBlank ? solve() : solve(incompleteValidBoard)
     if (validate(result)) {
-      printBoard(result)
+      continue
     } else {
       isAllValid = false
       break
@@ -101,8 +92,7 @@ function testSudokuMassively(usingBlank = true) {
   console.log(stdoutTitle + stdoutInfo + stdoutPass)
 }
 
-// testGetBlockRange()
-// testValidate()
-// testPrintBoard()
-// testSudoku()
-testSudokuMassively(false)
+testValidate()
+testPrint()
+testSudoku()
+testSudokuMassively()

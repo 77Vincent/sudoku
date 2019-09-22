@@ -1,36 +1,86 @@
 /**
- * Sudoku solver
+ * Sudoku solver 
  * @author Vincent77
  * @email wentianqi77@outlook.com
  */
+const blockCors = [
+  [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]],
+  [[3, 0], [3, 1], [3, 2], [4, 0], [4, 1], [4, 2], [5, 0], [5, 1], [5, 2]],
+  [[6, 0], [6, 1], [6, 2], [7, 0], [7, 1], [7, 2], [8, 0], [8, 1], [8, 2]],
+  [[0, 3], [0, 4], [0, 5], [1, 3], [1, 4], [1, 5], [2, 3], [2, 4], [2, 5]],
+  [[3, 3], [3, 4], [3, 5], [4, 3], [4, 4], [4, 5], [5, 3], [5, 4], [5, 5]],
+  [[6, 3], [6, 4], [6, 5], [7, 3], [7, 4], [7, 5], [8, 3], [8, 4], [8, 5]],
+  [[0, 6], [0, 7], [0, 8], [1, 6], [1, 7], [1, 8], [2, 6], [2, 7], [2, 8]],
+  [[3, 6], [3, 7], [3, 8], [4, 6], [4, 7], [4, 8], [5, 6], [5, 7], [5, 8]],
+  [[6, 6], [6, 7], [6, 8], [7, 6], [7, 7], [7, 8], [8, 6], [8, 7], [8, 8]],
+]
+const blockIndexMap = [
+  [0, 0, 0, 1, 1, 1, 2, 2, 2],
+  [0, 0, 0, 1, 1, 1, 2, 2, 2],
+  [0, 0, 0, 1, 1, 1, 2, 2, 2],
+  [3, 3, 3, 4, 4, 4, 5, 5, 5],
+  [3, 3, 3, 4, 4, 4, 5, 5, 5],
+  [3, 3, 3, 4, 4, 4, 5, 5, 5],
+  [6, 6, 6, 7, 7, 7, 8, 8, 8],
+  [6, 6, 6, 7, 7, 7, 8, 8, 8],
+  [6, 6, 6, 7, 7, 7, 8, 8, 8],
+]
 
-function sudoku(inputBoard) {
+function validate(board = []) {
+  let isValid = true
+
+  for (let i = 0; i < 9; i += 1) {
+    // Eliminate zero
+    board[i] = board[i].filter(i => i !== 0)
+    
+    // Validate row
+    if (new Set(board[i]).size !== 9) {
+      isValid = false
+      break
+    }
+
+    // Validate column
+    if (new Set(board.map(row => row[i])).size !== 9) {
+      isValid = false
+      break
+    }
+
+    // Validate block
+    if (new Set(blockCors[i].map(cor => board[cor[1]][cor[0]])).size !== 9) {
+      isValid = false
+      break
+    }
+  }
+  return isValid
+}
+
+function print(board) {
+  const borderRow = '+---+---+---+---+---+---+---+---+---+\n'
+  let borderColumn = ''
+  let output = ''
+
+  for (let y = 0; y < 9; y += 1) {
+    output += borderRow
+
+    borderColumn = ''
+
+    for (let x = 0; x < 9; x += 1) {
+      borderColumn += '| ' + (board[y][x] || ' ') + ' '
+    }
+    borderColumn += '|\n'
+
+    output += borderColumn
+  }
+  output += borderRow
+  console.log(output)
+}
+
+
+function solve(inputBoard) {
   // copy the origin board
   const board = inputBoard
     ? inputBoard.map(row => row.map(num => num))
     : [ [], [], [], [], [], [], [], [], [] ]
-  const blockCors = [
-    [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]],
-    [[3, 0], [3, 1], [3, 2], [4, 0], [4, 1], [4, 2], [5, 0], [5, 1], [5, 2]],
-    [[6, 0], [6, 1], [6, 2], [7, 0], [7, 1], [7, 2], [8, 0], [8, 1], [8, 2]],
-    [[0, 3], [0, 4], [0, 5], [1, 3], [1, 4], [1, 5], [2, 3], [2, 4], [2, 5]],
-    [[3, 3], [3, 4], [3, 5], [4, 3], [4, 4], [4, 5], [5, 3], [5, 4], [5, 5]],
-    [[6, 3], [6, 4], [6, 5], [7, 3], [7, 4], [7, 5], [8, 3], [8, 4], [8, 5]],
-    [[0, 6], [0, 7], [0, 8], [1, 6], [1, 7], [1, 8], [2, 6], [2, 7], [2, 8]],
-    [[3, 6], [3, 7], [3, 8], [4, 6], [4, 7], [4, 8], [5, 6], [5, 7], [5, 8]],
-    [[6, 6], [6, 7], [6, 8], [7, 6], [7, 7], [7, 8], [8, 6], [8, 7], [8, 8]],
-  ]
-  const blockIndexMap = [
-    [0, 0, 0, 1, 1, 1, 2, 2, 2],
-    [0, 0, 0, 1, 1, 1, 2, 2, 2],
-    [0, 0, 0, 1, 1, 1, 2, 2, 2],
-    [3, 3, 3, 4, 4, 4, 5, 5, 5],
-    [3, 3, 3, 4, 4, 4, 5, 5, 5],
-    [3, 3, 3, 4, 4, 4, 5, 5, 5],
-    [6, 6, 6, 7, 7, 7, 8, 8, 8],
-    [6, 6, 6, 7, 7, 7, 8, 8, 8],
-    [6, 6, 6, 7, 7, 7, 8, 8, 8],
-  ]
   const pick = (...args) => {
     const seed = 1 + Math.floor(Math.random() * args.length)
     return args[seed - 1]
@@ -97,4 +147,8 @@ function sudoku(inputBoard) {
   return board 
 }
 
-module.exports = sudoku 
+module.exports = {
+  print,
+  solve,
+  validate,
+}
