@@ -41,7 +41,7 @@ const incompleteValidBoard = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
 
-const divider = '\n================== TEST BEGIN ==================\n'
+const divider = '\n================== TEST RESULT ==================\n'
 
 function testValidate() {
   const valid = `VALID     : ${validate(validBoard)}\n`

@@ -55,17 +55,28 @@ function validate(board = []) {
 
 function print(board) {
   const ROW = '+---+---+---+---+---+---+---+---+---+\n'
-  const COLOR = 92
+  const BORDER_COLOR = 92
+  const REGULAR_COLOR = 90
 
   for (let y = 0; y < 9; y += 1) {
-    process.stdout.write(colorize(y%3 === 0 ? COLOR : 0, ROW))
+    if (y%3 === 0) {
+      process.stdout.write(colorize(BORDER_COLOR, ROW))
+    } else {
+      process.stdout.write(colorize(BORDER_COLOR, '+'))
+      process.stdout.write(colorize(REGULAR_COLOR, '---+---+---'))
+      process.stdout.write(colorize(BORDER_COLOR, '+'))
+      process.stdout.write(colorize(REGULAR_COLOR, '---+---+---'))
+      process.stdout.write(colorize(BORDER_COLOR, '+'))
+      process.stdout.write(colorize(REGULAR_COLOR, '---+---+---'))
+      process.stdout.write(colorize(BORDER_COLOR, '+\n'))
+    }
     for (let x = 0; x < 9; x += 1) {
-      process.stdout.write(colorize(x%3 === 0 ? COLOR : 0, '|'))
+      process.stdout.write(colorize(x%3 === 0 ? BORDER_COLOR : 0, '|'))
       process.stdout.write(' ' + board[y][x] + ' ')
     }
-    process.stdout.write(colorize(COLOR, '|\n'))
+    process.stdout.write(colorize(BORDER_COLOR, '|\n'))
   }
-  process.stdout.write(colorize(COLOR, ROW))
+  process.stdout.write(colorize(BORDER_COLOR, ROW))
 }
 
 
