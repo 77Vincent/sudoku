@@ -59,11 +59,26 @@ function testSudoku() {
     const end = new Date().getTime()
     process.stdout.write(colorize(92, `\n\nTEST OF SOLVER FROM ${type}\n`))
     process.stdout.write(colorize(92, divider))
-    process.stdout.write(`COSTS: ${end - start} milliseconds\n`)
-    process.stdout.write(`PASS : ${validate(result)}\n`)
+    process.stdout.write(`COSTS : ${end - start} milliseconds\n`)
+    process.stdout.write(`PASS  : ${validate(result)}\n`)
     if (i === 0) {
       print(result)
     } else {
+      // Check if the original input board is intact
+      let isOriginIntact = true
+      for (let y = 0; y < 9; y++) {
+        if (!isOriginIntact) {
+          break
+        }
+        for (let x = 0; x < 9; x++) {
+          const n = incompleteValidBoard[y][x]
+          if (n !== 0 && n !== result[y][x]) {
+            isOriginIntact = false
+            break
+          }
+        }
+      }
+      process.stdout.write(`INTACT: ${isOriginIntact}\n`)
       print(result, incompleteValidBoard)
     }
   }
