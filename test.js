@@ -31,15 +31,15 @@ const invalidBoard = [
 ]
 
 const incompleteValidBoard = [
-  [1, 0, 0, 0, 0, 0, 0, 0, 2],
-  [0, 2, 0, 0, 0, 0, 0, 3, 0],
-  [0, 0, 3, 0, 0, 0, 4, 0, 0],
-  [0, 0, 0, 4, 0, 7, 0, 0, 0],
-  [0, 0, 0, 0, 5, 0, 0, 0, 0],
-  [0, 0, 0, 8, 0, 6, 0, 0, 0],
-  [0, 0, 1, 0, 0, 0, 7, 0, 0],
-  [0, 9, 0, 0, 0, 0, 0, 8, 0],
-  [6, 0, 0, 0, 0, 0, 0, 0, 9],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 1, 0, 0, 2, 0, 0, 3, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 4, 0, 0, 5, 0, 0, 6, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
+  [0, 7, 0, 0, 8, 0, 0, 9, 0],
+  [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
 
 function testGetBlockRange() {
@@ -82,8 +82,8 @@ function testSudoku() {
 }
 
 function testSudokuMassively(usingBlank = true) {
-  const ITERATION = 50 
-  const isAllValid = true
+  const ITERATION = 100
+  let isAllValid = true
   const start = new Date().getTime()
   for (let i = 0; i < ITERATION; i++) {
     const result = usingBlank ? sudoku() : sudoku(incompleteValidBoard)
@@ -105,4 +105,4 @@ function testSudokuMassively(usingBlank = true) {
 // testValidate()
 // testPrintBoard()
 // testSudoku()
-testSudokuMassively(true)
+testSudokuMassively()
