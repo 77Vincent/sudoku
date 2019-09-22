@@ -1,5 +1,5 @@
 /**
- * Sudoku solver 
+ * Sudoku solver & generator
  * @author Vincent77
  * @email wentianqi77@outlook.com
  */
@@ -30,23 +30,23 @@ function colorize(color, output) {
   return ['\033[', color, 'm', output, '\033[0m'].join('');
 }
 
-function validate(board = []) {
+function validate(board) {
+  if (!board) {
+    return false
+  }
   for (let i = 0; i < 9; i += 1) {
-    // Eliminate zero
-    board[i] = board[i].filter(i => i !== 0)
-    
     // Validate row
-    if (new Set(board[i]).size !== 9) {
+    if (new Set(board[i].filter(n => n !== 0)).size !== 9) {
       return false
     }
 
     // Validate column
-    if (new Set(board.map(row => row[i])).size !== 9) {
+    if (new Set(board.map(row => row[i]).filter(n => n !== 0)).size !== 9) {
       return false
     }
 
     // Validate block
-    if (new Set(blockCors[i].map(cor => board[cor[1]][cor[0]])).size !== 9) {
+    if (new Set(blockCors[i].map(cor => board[cor[1]][cor[0]]).filter(n => n !== 0)).size !== 9) {
       return false
     }
   }
