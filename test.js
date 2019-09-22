@@ -41,8 +41,11 @@ const incompleteValidBoard = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
 
+const divider = '----------------------------------------\n'
+
 function testValidate() {
   process.stdout.write(colorize(92, '\n\nTEST OF VALIDATE\n'))
+  process.stdout.write(colorize(92, divider))
   process.stdout.write(`VALID     : ${validate(validBoard)}\n`)
   process.stdout.write(`INVALID   : ${validate(invalidBoard)}\n`)
   process.stdout.write(`INCOMPLETE: ${validate(incompleteValidBoard)}`)
@@ -50,26 +53,26 @@ function testValidate() {
 
 function testSudoku() {
   for (let i = 0; i < 2; i++) {
-    setTimeout(() => {
-      const type = i === 1 ? 'SCRATCH' : 'INCOMPLETE'
-      const start = new Date().getTime()
-      const result = i === 1 ? solve() : solve(incompleteValidBoard)
-      const end = new Date().getTime()
-      process.stdout.write(colorize(92, `\n\nTEST OF SOLVER FROM ${type}\n`))
-      process.stdout.write(`COSTS: ${end - start} milliseconds\n`)
-      process.stdout.write(`PASS : ${validate(result)}\n`)
-      print(result)
-    }, 0)
+    const type = i === 0 ? 'SCRATCH' : 'INCOMPLETE'
+    const start = new Date().getTime()
+    const result = i === 0 ? solve() : solve(incompleteValidBoard)
+    const end = new Date().getTime()
+    process.stdout.write(colorize(92, `\n\nTEST OF SOLVER FROM ${type}\n`))
+    process.stdout.write(colorize(92, divider))
+    process.stdout.write(`COSTS: ${end - start} milliseconds\n`)
+    process.stdout.write(`PASS : ${validate(result)}\n`)
+    print(result)
   }
 }
 
-function bulkTestSudoku(usingBlank = true) {
+function bulkTestSudoku() {
   const ITERATION = 500
-  setTimeout(() => {
+  for (let i = 0; i < 2; i++) {
     let isAllValid = true
+    const type = i === 0 ? 'SCRATCH' : 'INCOMPLETE'
     const start = new Date().getTime()
     for (let i = 0; i < ITERATION; i++) {
-      const result = usingBlank ? solve() : solve(incompleteValidBoard)
+      const result = i === 0 ? solve() : solve(incompleteValidBoard)
       if (validate(result)) {
         continue
       } else {
@@ -78,13 +81,13 @@ function bulkTestSudoku(usingBlank = true) {
       }
     }
     const end = new Date().getTime()
-    process.stdout.write(colorize(92, '\n\nTEST OF SOLVER - BULK RUN\n'))
-    process.stdout.write(`FROM      : ${usingBlank ? 'blank' : 'imcomplete'}\n`)
+    process.stdout.write(colorize(92, `\n\nTEST OF SOLVER BULK RUN FROM ${type}\n`))
+    process.stdout.write(colorize(92, divider))
     process.stdout.write(`ITERATIONS: ${ITERATION}\n`)
     process.stdout.write(`COSTS     : ${end - start} milliseconds\n`)
     process.stdout.write(`PER RUN   : ${(end - start) / ITERATION} milliseconds\n`)
-    process.stdout.write(`PASS      : ${isAllValid}`)
-  }, 0)
+    process.stdout.write(`PASS      : ${isAllValid}\n`)
+  }
 }
 
 testValidate()
