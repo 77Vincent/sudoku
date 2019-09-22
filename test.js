@@ -82,7 +82,7 @@ function testSudoku() {
 }
 
 function testSudokuMassively(usingBlank = true) {
-  const ITERATION = 100
+  const ITERATION = 500
   let isAllValid = true
   const start = new Date().getTime()
   for (let i = 0; i < ITERATION; i++) {

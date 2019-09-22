@@ -4,9 +4,11 @@
  * @email wentianqi77@outlook.com
  */
 
-function sudoku(originBoard) {
+function sudoku(inputBoard) {
   // copy the origin board
-  const board = [ [], [], [], [], [], [], [], [], [] ]
+  const board = inputBoard
+    ? inputBoard.map(row => row.map(num => num))
+    : [ [], [], [], [], [], [], [], [], [] ]
   const blockCors = [
     [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2]],
     [[3, 0], [3, 1], [3, 2], [4, 0], [4, 1], [4, 2], [5, 0], [5, 1], [5, 2]],
@@ -40,6 +42,7 @@ function sudoku(originBoard) {
   for (let y = 0; y < 9; y++) {
     for (let x = 0; x < 9; x++) {
       const su = board[y][x]
+      if (su) { continue }
 
       let availables =  range
         // Filter out row existing
@@ -51,11 +54,18 @@ function sudoku(originBoard) {
       const picked = blockCors[blockIndexMap[y][x]].map(cor => board[cor[1]][cor[0]])
       availables = availables.filter(num => !picked.includes(num) && num !== lastChosen)
       
-      if (availables.length === 0) {
+      if (availables.length === 0 && y >= 1) {
         tried += 1 
         x = x - tried
 
-        if (tried < 4) {
+        if (tried >= 4) {
+          board[y] = []
+          board[y - 1] = []
+          tried = 0
+          y -= 2
+          lastChosen = null
+          break
+        } else {
           if (x >= 0) {
             lastChosen = board[y][x]
             board[y].splice(x + 1)
@@ -67,14 +77,13 @@ function sudoku(originBoard) {
             y -= 2
             break
           }
-        } else {
-          board[y] = []
-          board[y - 1] = []
-          tried = 0
-          y -= 2
-          lastChosen = null
-          break
         }
+      } else if (availables.length === 0 && y === 0) {
+        tried += 1 
+        x = x - tried >= 0 ? x - tried : 0
+        lastChosen = board[y][x]
+        board[y].splice(x + 1)
+        continue
       } else {
         board[y][x] = su || pick(...availables)
         lastChosen = null
