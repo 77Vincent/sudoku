@@ -41,84 +41,97 @@ const incompleteValidBoard = [
   [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ]
 
-const divider = '----------------------------------------\n'
+const ITERATION = 500
+const COLOR_INFO = 92
+const COLOR_VALID = 92
+const COLOR_INVALID = 91
+const TEXT = {
+  VALID: 'valid',
+  INVALID: 'invalid',
+  SCRATCH: 'scratch',
+  INCOMPLETE: 'incomplete',
+  MS: 'ms',
+}
+const TEST_SUIT = ['SCRATCH', 'INCOMPLETE']
+
+function colorTrueOrFalse(result) {
+  return colorize(result ? COLOR_VALID : COLOR_INVALID, result)
+}
+
+function divider(info = '') {
+  const title = `\n\nTEST OF ${info.toUpperCase()}\n`
+  const divider = '----------------------------------------\n'
+  return colorize(COLOR_INFO, title + divider)
+}
+
+function checkIntegrity(board, origin) {
+  if (!origin) {
+    return true
+  }
+  for (let y = 0; y < 9; y++) {
+    for (let x = 0; x < 9; x++) {
+      const n = origin[y][x]
+      if (n !== 0 && n !== board[y][x]) {
+        return false
+      }
+    }
+  }
+  return true
+}
 
 function testValidate() {
-  process.stdout.write(colorize(92, '\n\nTEST OF VALIDATE\n'))
-  process.stdout.write(colorize(92, divider))
-  process.stdout.write(`VALID     : ${validate(validBoard)}\n`)
-  process.stdout.write(`INVALID   : ${validate(invalidBoard)}\n`)
-  process.stdout.write(`INCOMPLETE: ${validate(incompleteValidBoard)}`)
+  process.stdout.write(divider('validate function'))
+  process.stdout.write(`IS VALID BOARD ${TEXT.VALID.toUpperCase()}       : `)
+  process.stdout.write(`${colorTrueOrFalse(validate(validBoard))}\n`)
+  process.stdout.write(`IS INVALID BOARD ${TEXT.INVALID.toUpperCase()}   : `)
+  process.stdout.write(`${colorTrueOrFalse(!validate(invalidBoard))}\n`)
+  process.stdout.write(`IS INCOMPLETE BOARD ${TEXT.INVALID.toUpperCase()}: `)
+  process.stdout.write(`${colorTrueOrFalse(!validate(incompleteValidBoard))}\n`)
 }
 
 function testSudoku() {
-  for (let i = 0; i < 2; i++) {
-    const type = i === 0 ? 'SCRATCH' : 'INCOMPLETE'
+  process.stdout.write(divider(`test of sudoku`))
+  TEST_SUIT.forEach(type => {
     const start = new Date().getTime()
-    const result = i === 0 ? solve() : solve(incompleteValidBoard)
+    const result = solve(type === TEST_SUIT[0] ? undefined : incompleteValidBoard)
     const end = new Date().getTime()
-    process.stdout.write(colorize(92, `\n\nTEST OF SOLVER FROM ${type}\n`))
-    process.stdout.write(colorize(92, divider))
-    process.stdout.write(`COSTS : ${end - start} milliseconds\n`)
-    process.stdout.write(`VALID : ${validate(result)}\n`)
-    if (i === 0) {
-      print(result)
-    } else {
-      // Check if the original input board is intact
-      let isOriginIntact = true
-      for (let y = 0; y < 9; y++) {
-        if (!isOriginIntact) {
-          break
-        }
-        for (let x = 0; x < 9; x++) {
-          const n = incompleteValidBoard[y][x]
-          if (n !== 0 && n !== result[y][x]) {
-            isOriginIntact = false
-            break
-          }
-        }
-      }
-      process.stdout.write(`INTACT: ${isOriginIntact}\n`)
-      print(result, incompleteValidBoard)
-    }
-  }
+    const isValid = colorTrueOrFalse(validate(result))
+    const isIntact = colorTrueOrFalse(checkIntegrity(result, type === 'SCRATCH' ? undefined : incompleteValidBoard))
+
+    process.stdout.write(`COSTS : ${end - start} ${TEXT.MS}\n`)
+    process.stdout.write(`VALID : `)
+    process.stdout.write(`${isValid}\n`)
+    process.stdout.write(`INTACT: `)
+    process.stdout.write(`${isIntact}\n`)
+    print(result, type === TEST_SUIT[0] ? undefined : incompleteValidBoard)
+  })
 }
 
 function bulkTestSudoku() {
-  const ITERATION = 500
-  for (let i = 0; i < 2; i++) {
-    let isAllValid = true
-    let isAllIntact = true
-    const type = i === 0 ? 'SCRATCH' : 'INCOMPLETE'
-    const start = new Date().getTime()
-    for (let i = 0; i < ITERATION; i++) {
-      const result = i === 0 ? solve() : solve(incompleteValidBoard)
-      for (let y = 0; y < 9; y++) {
-        for (let x = 0; x < 9; x++) {
-          const n = incompleteValidBoard[y][x]
-          if (n !== 0 && n !== result[y][x]) {
-            isAllIntact = false
-            break
-          }
-        }
+  TEST_SUIT.forEach(type => {
+    setTimeout(() => {
+      let isAllValid = []
+      let isAllIntact = []
+
+      const start = new Date().getTime()
+      for (let i = 0; i < ITERATION; i++) {
+        const result = solve(type === TEST_SUIT[0] ? undefined : incompleteValidBoard)
+        isAllValid.push(validate(result))
+        isAllIntact.push(checkIntegrity(result, type === TEST_SUIT[0] ? undefined : incompleteValidBoard))
       }
-      if (validate(result)) {
-        continue
-      } else {
-        isAllValid = false
-      }
-    }
-    const end = new Date().getTime()
-    process.stdout.write(colorize(92, `\n\nTEST OF SOLVER BULK RUN FROM ${type}\n`))
-    process.stdout.write(colorize(92, divider))
-    process.stdout.write(`ITERATIONS: ${ITERATION}\n`)
-    process.stdout.write(`COSTS     : ${end - start} milliseconds\n`)
-    process.stdout.write(`PER RUN   : ${(end - start) / ITERATION} milliseconds\n`)
-    process.stdout.write(`ALL VALID : ${isAllValid}\n`)
-    if (i === 1) {
-      process.stdout.write(`ALL INTACT: ${isAllIntact}\n`)
-    }
-  }
+      const end = new Date().getTime()
+      const total = end - start
+
+      process.stdout.write(divider(`bulk running from ${type}`))
+      process.stdout.write(`ITERATIONS: ${ITERATION}\n`)
+      process.stdout.write(`COSTS     : ${total} ${TEXT.MS}\n`)
+      process.stdout.write(`PER RUN   : ${(total) / ITERATION} ${TEXT.MS}\n`)
+      process.stdout.write(`ALL VALID : `)
+      process.stdout.write(`${colorTrueOrFalse(isAllValid.reduce((a, b) => a && b))}\n`)
+      process.stdout.write(`ALL INTACT : `)
+      process.stdout.write(`${colorTrueOrFalse(isAllIntact.reduce((a, b) => a && b))}\n`)
+    }, 0)
+  })
 }
 
 testValidate()
