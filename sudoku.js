@@ -109,46 +109,42 @@ function solve(inputBoard = [[], [], [], [], [], [], [], [], []]) {
       availables = availables.filter(num => !picked.includes(num) && num !== lastChosen)
       
       if (availables.length === 0) {
+        tried++
+
         if (y === 0) {
-          tried += 1 
           x = x - tried >= 0 ? x - tried : 0
 
           lastChosen = board[y][x]
           board[y].splice(x)
-          board[y].concat(inputBoard[y].map(n => n).splice(x))
+          board[y].push(...inputBoard[y].map(n => n).splice(x))
           x--
           continue
-        } else if (y === 1) {
-          board[y] = inputBoard[y].map(n => n)
-          board[y - 1] = inputBoard[y - 1].map(n => n)
-          tried = 0
-          y -= 2
-          lastChosen = null
-          break
-        } else if (y >= 2) {
-          tried += 1 
+        } else if (y >= 1) {
           x = x - tried
 
-          if (tried >= 5) {
+          if (tried === 5) {
             board[y] = inputBoard[y].map(n => n)
             board[y - 1] = inputBoard[y - 1].map(n => n)
-            board[y - 2] = inputBoard[y - 2].map(n => n)
+            if (y >= 2) {
+              board[y - 2] = inputBoard[y - 2].map(n => n)
+              y--
+            }
             tried = 0
-            y -= 3 
+            y -= 2 
             lastChosen = null
             break
           } else {
             if (x >= 0) {
               lastChosen = board[y][x]
               board[y].splice(x)
-              board[y].concat(inputBoard[y].map(n => n).splice(x))
+              board[y].push(...inputBoard[y].map(n => n).splice(x))
               x--
               continue
             } else {
               lastChosen = board[y - 1][8 + x]
               board[y] = inputBoard[y].map(n => n)
               board[y - 1].splice(9 + x)
-              board[y - 1].concat(inputBoard[y - 1].map(n => n).splice(9 + x))
+              board[y - 1].push(...inputBoard[y - 1].map(n => n).splice(9 + x))
               y -= 2
               break
             }
