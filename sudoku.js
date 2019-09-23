@@ -92,11 +92,10 @@ function solve(inputBoard = [[], [], [], [], [], [], [], [], []]) {
   const range = [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
   let tried = 0
-  let lastChosen = null
   for (let y = 0; y < 9; y++) {
     for (let x = 0; x < 9; x++) {
       const su = board[y][x]
-      if (!!su) { continue }
+      if (su) { continue }
 
       const picked = blockCors[blockIndexMap[y][x]].map(cor => board[cor[1]][cor[0]])
       const availables = range.filter(n =>
@@ -106,43 +105,40 @@ function solve(inputBoard = [[], [], [], [], [], [], [], [], []]) {
         && !board.map(row => row[x]).includes(n)
         // Filter out block existing
         && !picked.includes(n)
-        // Filter out last chosen num
-        && n !== lastChosen
       )
       
       if (availables.length === 0) {
         tried++
-        console.log(tried)
-        if (tried >= (y * 9 + x + 1)) {
+
+        if (tried >= (y * 9 + x)) {
+          for (let i = 0; i < y; i++) {
+            board[i] = inputBoard[i].map(n => n)
+          }
           tried = 0
-          lastChosen = null
           y = -1
           break
         }
 
-        x = tried - x
-        const backX = Math.abs(x%9)
-        let backY
+        x = x - tried
+
         if (x >= 0) {
-          backY = Math.floor(x/9) > y ? y : Math.floor(x/9) 
+          board[y].splice(x)
+          board[y].push(...inputBoard[y].map(n => n).splice(x))
+          x--
+          continue
         } else {
-          backY = 0
-        }
-
-        for (let i = 0; i < backY; i++) {
+          for (let i = 0; i < Math.abs(Math.ceil(x/9)); i++) {
+            board[y] = inputBoard[y].map(n => n)
+            y--
+          }
+          x = 9 + x%9
+          board[y].splice(x)
+          board[y].push(...inputBoard[y].map(n => n).splice(x))
           y--
-          board[y] = inputBoard[y].map(n => n)
+          break
         }
-
-        y = y < 1 ? 0 : y - 1
-        lastChosen = board[y][8 - backX]
-        board[y].splice(9 - backX)
-        board[y].push(...inputBoard[y].map(n => n).splice(backX))
-        y--
-        break
       } else {
         board[y][x] = su || pick(...availables)
-        lastChosen = null
       }
     }
   }
