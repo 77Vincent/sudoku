@@ -30,7 +30,7 @@ const invalidBoard = [
 ]
 
 const incompleteValidBoard = [
-  [2, 0, 0, 3, 0, 0, 4, 0, 0],
+  [2, 2, 0, 3, 0, 0, 4, 0, 0],
   [0, 1, 0, 0, 2, 0, 0, 3, 0],
   [0, 0, 3, 0, 0, 4, 0, 0, 5],
   [5, 0, 0, 6, 0, 0, 7, 0, 0],
@@ -65,6 +65,9 @@ function divider(info = '') {
 }
 
 function checkIntegrity(board, origin) {
+  if (!board) {
+    return false
+  }
   if (!origin) {
     return true
   }

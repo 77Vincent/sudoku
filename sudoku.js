@@ -54,6 +54,9 @@ function validate(board) {
 }
 
 function print(board, inputBoard) {
+  if (!board) {
+    board = new Array(9).fill().map(() => new Array(9).fill(0))
+  }
   const ROW = '+---+---+---+---+---+---+---+---+---+\n'
   const BORDER_COLOR = 92
   const REGULAR_COLOR = 90
@@ -70,10 +73,11 @@ function print(board, inputBoard) {
       process.stdout.write(colorize(BORDER_COLOR, '+\n'))
     }
     for (let x = 0; x < 9; x += 1) {
+      const n = board[y][x]
       process.stdout.write(colorize(x%3 === 0 ? BORDER_COLOR : REGULAR_COLOR, '|'))
       process.stdout.write(colorize(
         inputBoard && inputBoard[y][x] !== 0 ? INPUT_NUM_COLOR : 0,
-        ` ${board[y][x]} `
+        ` ${n ? n : ' '} `
       ))
     }
     process.stdout.write(colorize(BORDER_COLOR, '|\n'))
@@ -90,12 +94,20 @@ function solve(inputBoard = [[], [], [], [], [], [], [], [], []]) {
     return args[seed - 1]
   }
   const range = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  // If it did not end over this amount of tests, end the solver
+  const threshold = 300
 
   let tried = 0
+  let test = 0 
   for (let y = 0; y < 9; y++) {
     for (let x = 0; x < 9; x++) {
       const su = board[y][x]
-      if (su) { continue }
+      if (su) {
+        continue
+      }
+      if (test > threshold) {
+        return false
+      }
 
       const picked = blockCors[blockIndexMap[y][x]].map(cor => board[cor[1]][cor[0]])
       const availables = range.filter(n =>
@@ -106,7 +118,7 @@ function solve(inputBoard = [[], [], [], [], [], [], [], [], []]) {
         // Filter out block existing
         && !picked.includes(n)
       )
-      
+
       if (availables.length === 0) {
         tried++
 
@@ -116,6 +128,7 @@ function solve(inputBoard = [[], [], [], [], [], [], [], [], []]) {
           }
           tried = 0
           y = -1
+          test++
           break
         }
 
@@ -143,7 +156,7 @@ function solve(inputBoard = [[], [], [], [], [], [], [], [], []]) {
     }
   }
 
-  return board 
+  return board
 }
 
 module.exports = {
