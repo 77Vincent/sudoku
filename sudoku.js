@@ -96,60 +96,50 @@ function solve(inputBoard = [[], [], [], [], [], [], [], [], []]) {
   for (let y = 0; y < 9; y++) {
     for (let x = 0; x < 9; x++) {
       const su = board[y][x]
-      if (su) { continue }
+      if (!!su) { continue }
 
-      let availables =  range
-        // Filter out row existing
-        .filter(num => !board[y].includes(num))
-        // Filter out column existing
-        .filter(num => !board.map(row => row[x]).includes(num))
-      
-      // Filter out block existing
       const picked = blockCors[blockIndexMap[y][x]].map(cor => board[cor[1]][cor[0]])
-      availables = availables.filter(num => !picked.includes(num) && num !== lastChosen)
+      const availables = range.filter(n =>
+        // Filter out row existing
+        !board[y].includes(n)
+        // Filter out column existing
+        && !board.map(row => row[x]).includes(n)
+        // Filter out block existing
+        && !picked.includes(n)
+        // Filter out last chosen num
+        && n !== lastChosen
+      )
       
       if (availables.length === 0) {
         tried++
-
-        if (y === 0) {
-          x = x - tried >= 0 ? x - tried : 0
-
-          lastChosen = board[y][x]
-          board[y].splice(x)
-          board[y].push(...inputBoard[y].map(n => n).splice(x))
-          x--
-          continue
-        } else if (y >= 1) {
-          x = x - tried
-
-          if (tried === 5) {
-            board[y] = inputBoard[y].map(n => n)
-            board[y - 1] = inputBoard[y - 1].map(n => n)
-            if (y >= 2) {
-              board[y - 2] = inputBoard[y - 2].map(n => n)
-              y--
-            }
-            tried = 0
-            y -= 2 
-            lastChosen = null
-            break
-          } else {
-            if (x >= 0) {
-              lastChosen = board[y][x]
-              board[y].splice(x)
-              board[y].push(...inputBoard[y].map(n => n).splice(x))
-              x--
-              continue
-            } else {
-              lastChosen = board[y - 1][8 + x]
-              board[y] = inputBoard[y].map(n => n)
-              board[y - 1].splice(9 + x)
-              board[y - 1].push(...inputBoard[y - 1].map(n => n).splice(9 + x))
-              y -= 2
-              break
-            }
-          }
+        console.log(tried)
+        if (tried >= (y * 9 + x + 1)) {
+          tried = 0
+          lastChosen = null
+          y = -1
+          break
         }
+
+        x = tried - x
+        const backX = Math.abs(x%9)
+        let backY
+        if (x >= 0) {
+          backY = Math.floor(x/9) > y ? y : Math.floor(x/9) 
+        } else {
+          backY = 0
+        }
+
+        for (let i = 0; i < backY; i++) {
+          y--
+          board[y] = inputBoard[y].map(n => n)
+        }
+
+        y = y < 1 ? 0 : y - 1
+        lastChosen = board[y][8 - backX]
+        board[y].splice(9 - backX)
+        board[y].push(...inputBoard[y].map(n => n).splice(backX))
+        y--
+        break
       } else {
         board[y][x] = su || pick(...availables)
         lastChosen = null
