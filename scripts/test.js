@@ -1,11 +1,9 @@
-const {
-  solve,
-  validate,
-} = require('../src/sudoku')
+const solve = require('../src/main')
 
 const {
   colorize,
   print,
+  validate,
 } = require('../src/utilities')
 
 const validBoard = [
