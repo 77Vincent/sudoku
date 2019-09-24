@@ -22,7 +22,7 @@ const blockIndexMap = [
 ]
 
 function colorize(color, output) {
-  return ['\033[', color, 'm', output, '\033[0m'].join('');
+  return ['\x1b[', color, 'm', output, '\x1b[0m'].join('');
 }
 
 function print(board, inputBoard) {
@@ -88,3 +88,4 @@ module.exports = {
   blockCors,
   blockIndexMap,
 }
+

@@ -1,10 +1,11 @@
 {
-  "name": "sudoku",
+  "name": "sudoku-master",
   "version": "1.0.0",
   "description": "",
   "main": "sudoku.js",
   "scripts": {
-    "test": "node ./scripts/test.js"
+    "build": "babel src --out-dir lib --presets=@babel/env",
+    "test": "npm run build && node ./scripts/test.js"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,12 @@
   },
   "homepage": "https://github.com/77Vincent/sudoku#readme",
   "devDependencies": {
+    "@babel/cli": "^7.6.2",
+    "@babel/core": "^7.6.2",
+    "@babel/preset-env": "^7.6.2",
     "eslint": "^6.4.0"
+  },
+  "dependencies": {
+    "@babel/polyfill": "^7.6.0"
   }
 }
