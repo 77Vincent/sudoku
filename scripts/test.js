@@ -42,8 +42,8 @@ const incompleteValidBoard = [
   [0, 0, 9, 0, 0, 1, 0, 0, 2],
 ]
 
-const ITERATION = 500
-const COLOR_INFO = 92
+const ITERATION = 5000
+const COLOR_INFO = 96
 const COLOR_VALID = 92
 const COLOR_INVALID = 91
 const TEXT = {
@@ -68,9 +68,6 @@ function divider(info = '') {
 function checkIntegrity(board, origin) {
   if (!board) {
     return false
-  }
-  if (!origin) {
-    return true
   }
   for (let y = 0; y < 9; y++) {
     for (let x = 0; x < 9; x++) {
@@ -121,32 +118,37 @@ function bulkTestSudoku() {
       let isAllValid = []
       let isAllIntact = []
       let result = null
+      let percent = 0
 
+      process.stdout.write(divider(`bulk running from ${type}`))
       const start = new Date().getTime()
       for (let i = 0; i < ITERATION; i++) {
         switch (type) {
           case TEST_SUIT[0]:
             result = solve()
             isAllValid.push(validate(result))
-            isAllIntact.push(checkIntegrity(result))
             break
           case TEST_SUIT[1]:
             result = solve(incompleteValidBoard)
             isAllValid.push(validate(result))
             isAllIntact.push(checkIntegrity(result, incompleteValidBoard))
         }
+        if (Math.ceil(i / ITERATION * 100) > percent) {
+          process.stdout.write(colorize(COLOR_INFO, '#'))
+        }
+        percent = Math.ceil(i / ITERATION * 100)
       }
       const end = new Date().getTime()
-      const total = end - start
 
-      process.stdout.write(divider(`bulk running from ${type}`))
-      process.stdout.write(`ITERATIONS: ${ITERATION}\n`)
-      process.stdout.write(`COSTS     : ${total} ${TEXT.MS}\n`)
-      process.stdout.write(`PER RUN   : ${(total) / ITERATION} ${TEXT.MS}\n`)
+      process.stdout.write(`\nITERATIONS: ${ITERATION}\n`)
+      process.stdout.write(`PER RUN   : ${(end - start) / ITERATION} ${TEXT.MS}\n`)
       process.stdout.write(`ALL VALID : `)
       process.stdout.write(`${colorTrueOrFalse(isAllValid.reduce((a, b) => a && b))}\n`)
-      process.stdout.write(`ALL INTACT : `)
-      process.stdout.write(`${colorTrueOrFalse(isAllIntact.reduce((a, b) => a && b))}\n`)
+      switch (type) {
+        case TEST_SUIT[1]:
+          process.stdout.write(`ALL INTACT : `)
+          process.stdout.write(`${colorTrueOrFalse(isAllIntact.reduce((a, b) => a && b))}\n`)
+      }
     }, 0)
   })
 }

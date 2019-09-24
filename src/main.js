@@ -14,7 +14,7 @@ function solve(inputBoard = [[], [], [], [], [], [], [], [], []]) {
   }
   const range = [1, 2, 3, 4, 5, 6, 7, 8, 9]
   // If it did not end over this amount of tests, end the solver
-  const threshold = 300
+  const threshold = 10000
 
   let tried = 0
   let test = 0 
