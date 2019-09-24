@@ -99,15 +99,19 @@ function testSudoku() {
     const start = new Date().getTime()
     const result = solve(type === TEST_SUIT[0] ? undefined : incompleteValidBoard)
     const end = new Date().getTime()
-    const isValid = colorTrueOrFalse(validate(result))
-    const isIntact = colorTrueOrFalse(checkIntegrity(result, type === 'SCRATCH' ? undefined : incompleteValidBoard))
 
     process.stdout.write(`COSTS : ${end - start} ${TEXT.MS}\n`)
     process.stdout.write(`VALID : `)
-    process.stdout.write(`${isValid}\n`)
-    process.stdout.write(`INTACT: `)
-    process.stdout.write(`${isIntact}\n`)
-    print(result, type === TEST_SUIT[0] ? undefined : incompleteValidBoard)
+    process.stdout.write(`${colorTrueOrFalse(validate(result))}\n`)
+    switch (type) {
+      case TEST_SUIT[0]:
+        print(result)
+        break
+      case TEST_SUIT[1]:
+        process.stdout.write(`INTACT: `)
+        process.stdout.write(`${colorTrueOrFalse(checkIntegrity(result, incompleteValidBoard))}\n`)
+        print(result, incompleteValidBoard)
+    }
   })
 }
 
@@ -116,12 +120,21 @@ function bulkTestSudoku() {
     setTimeout(() => {
       let isAllValid = []
       let isAllIntact = []
+      let result = null
 
       const start = new Date().getTime()
       for (let i = 0; i < ITERATION; i++) {
-        const result = solve(type === TEST_SUIT[0] ? undefined : incompleteValidBoard)
-        isAllValid.push(validate(result))
-        isAllIntact.push(checkIntegrity(result, type === TEST_SUIT[0] ? undefined : incompleteValidBoard))
+        switch (type) {
+          case TEST_SUIT[0]:
+            result = solve()
+            isAllValid.push(validate(result))
+            isAllIntact.push(checkIntegrity(result))
+            break
+          case TEST_SUIT[1]:
+            result = solve(incompleteValidBoard)
+            isAllValid.push(validate(result))
+            isAllIntact.push(checkIntegrity(result, incompleteValidBoard))
+        }
       }
       const end = new Date().getTime()
       const total = end - start
