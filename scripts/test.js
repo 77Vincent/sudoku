@@ -1,9 +1,12 @@
 const {
-  colorize,
-  print,
   solve,
   validate,
-} = require('./sudoku')
+} = require('../src/sudoku')
+
+const {
+  colorize,
+  print,
+} = require('../src/utilities')
 
 const validBoard = [
   [1, 2, 3, 4, 5, 6, 7, 8, 9],
