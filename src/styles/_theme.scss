@@ -1,0 +1,9 @@
+$color-theme: seagreen;
+$color-gray-1: #ddd;
+$color-gray-2: #999;
+$color-gray-3: #333;
+
+.paper {
+  box-shadow: -2px -1px 5px 2px lighten($color-gray-2, 10%);
+  border-radius: 5px;
+}

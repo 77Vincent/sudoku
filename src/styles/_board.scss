@@ -1,13 +1,55 @@
+@import 'theme';
+
+$border-thick: 2px;
+$cell-size: 50px;
+
 .board {
-  width: 450px;
+  width: ($cell-size * 3 + $border-thick * 2) * 3 + $border-thick * 2;
+  height: ($cell-size * 3 + $border-thick * 2) * 3 + $border-thick * 2;
+  border: $border-thick solid $color-gray-2;
+  @extend .paper;
+
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+
+  .board-block {
+    float: left;
+    width: $cell-size * 3 + $border-thick * 2;
+    height: $cell-size * 3 + $border-thick * 2;
+    border: $border-thick solid $color-gray-2;
+
+    &:after {
+      content: "";
+      display: block;
+      clear: both;
+    }
+  }
 
   .board-cell {
-    width: 50px;
-    height: 50px;
+    width: $cell-size;
+    height: $cell-size;
     float: left;
     text-align: center;
     line-height: 50px;
-    border-top: 1px solid gray;
-    border-left: 1px solid gray;
+    border-bottom: 1px solid $color-gray-1;
+    border-right: 1px solid $color-gray-1;
+
+    &:nth-child(3n) {
+      border-right: none;
+    }
+
+    &:nth-child(7),
+    &:nth-child(8),
+    &:nth-child(9) {
+      border-bottom: none;
+    }
+
+    &:hover {
+      cursor: pointer;
+      background-color: $color-gray-1;
+    }
   }
 }

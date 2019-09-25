@@ -80,7 +80,6 @@ function validate(board) {
   return true 
 }
 
-
 export {
   colorize,
   print,
