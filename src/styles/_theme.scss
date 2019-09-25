@@ -3,9 +3,9 @@ $color-gray-0: #eee;
 $color-gray-1: #ddd;
 $color-gray-2: #999;
 $color-gray-3: #333;
-$color-azure: azure;
+$color-blue-0: lightsteelblue;
 
 .paper {
-  box-shadow: -2px 1px 3px 1px lighten($color-gray-2, 10%);
+  box-shadow: 1px 2px 3px 0px lighten($color-gray-2, 10%);
   border-radius: 5px;
 }

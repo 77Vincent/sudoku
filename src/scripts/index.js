@@ -8,8 +8,7 @@ import {
 import $ from 'jquery'
 
 const boardData = solve()
-
-const board = $('.board')
+const boardElement = $('.board')
 
 function boardBlockFormatConvertor(board) {
   const output = [ [], [], [], [], [], [], [], [], [] ]
@@ -22,14 +21,14 @@ function boardBlockFormatConvertor(board) {
   return output
 }
 
-boardBlockFormatConvertor(generate(boardData, 3)).forEach(row => {
+boardBlockFormatConvertor(generate(boardData, 5)).forEach(row => {
   const blockElement = $('<div />')
     .addClass('board-block')
-    .appendTo(board)
+    .appendTo(boardElement)
   row.forEach(n => {
     $('<div />')
       .text(n || '')
-      .addClass('board-cell')
+      .addClass(`board-cell ${n !== 0 ? 'board-cell-existing' : ''}`)
       .appendTo(blockElement)
   })
 })
