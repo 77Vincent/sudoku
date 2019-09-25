@@ -1,10 +1,10 @@
-const solve = require('../lib/main')
+const solve = require('./main')
 
 const {
   colorize,
   print,
   validate,
-} = require('../lib/utilities')
+} = require('./utilities')
 
 const validBoard = [
   [1, 2, 3, 4, 5, 6, 7, 8, 9],

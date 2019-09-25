@@ -81,7 +81,7 @@ function validate(board) {
 }
 
 
-module.exports = {
+export {
   colorize,
   print,
   validate,

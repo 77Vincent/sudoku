@@ -3,7 +3,7 @@
  * @author Vincent77
  * @email wentianqi77@outlook.com
  */
-const { blockCors, blockIndexMap } = require('./utilities')
+import { blockCors, blockIndexMap } from './utilities'
 
 function solve(inputBoard = [[], [], [], [], [], [], [], [], []]) {
   // copy the origin board
@@ -78,4 +78,4 @@ function solve(inputBoard = [[], [], [], [], [], [], [], [], []]) {
   return board
 }
 
-module.exports = solve
+export default solve
