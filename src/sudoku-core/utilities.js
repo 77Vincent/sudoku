@@ -21,6 +21,11 @@ const blockIndexMap = [
   [6, 6, 6, 7, 7, 7, 8, 8, 8],
 ]
 
+function pick (...args) {
+  const seed = 1 + Math.floor(Math.random() * args.length)
+  return args[seed - 1]
+}
+
 function colorize(color, output) {
   return ['\x1b[', color, 'm', output, '\x1b[0m'].join('');
 }
@@ -80,11 +85,29 @@ function validate(board) {
   return true 
 }
 
+function generate(board, extract = 0) {
+  const output = board.map(row => {
+    let range = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    const targets = []
+
+    for (let i = 0; i < extract; i++) {
+      const p = pick(...range)
+      targets.push(p)
+      range = range.filter(n => n !== p)
+    }
+
+    return row.map((n, i) => targets.includes(i) ? 0 : n) 
+  })
+  return output
+}
+
 export {
   colorize,
   print,
   validate,
   blockCors,
   blockIndexMap,
+  generate,
+  pick,
 }
 

@@ -1,8 +1,9 @@
 import solve from './solve'
-import { blockCors, blockIndexMap } from './utilities'
+import { blockCors, blockIndexMap, generate } from './utilities'
 
 export {
   blockCors,
   blockIndexMap,
+  generate,
   solve,
 }

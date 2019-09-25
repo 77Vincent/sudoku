@@ -3,15 +3,11 @@
  * @author Vincent77
  * @email wentianqi77@outlook.com
  */
-import { blockCors, blockIndexMap } from './utilities'
+import { blockCors, blockIndexMap, pick } from './utilities'
 
 function solve(inputBoard = [[], [], [], [], [], [], [], [], []]) {
   // copy the origin board
   const board = inputBoard.map(row => row.map(n => n))
-  const pick = (...args) => {
-    const seed = 1 + Math.floor(Math.random() * args.length)
-    return args[seed - 1]
-  }
   const range = [1, 2, 3, 4, 5, 6, 7, 8, 9]
   // If it did not end over this amount of tests, end the solver
   const threshold = 10000
